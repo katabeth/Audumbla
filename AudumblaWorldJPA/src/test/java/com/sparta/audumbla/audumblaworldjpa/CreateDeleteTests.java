@@ -32,7 +32,7 @@ public class CreateDeleteTests {
     private CountryRepository countryRepository;
 
     @Mock
-    private CountryLanguageRepository countrylanguageRepository;
+    private CountryLanguageRepository countryLanguageRepository;
 
     @InjectMocks
     private WorldService worldService;
@@ -130,7 +130,7 @@ public class CreateDeleteTests {
         countrylanguage.setIsOfficial("T");
         countrylanguage.setPercentage(BigDecimal.valueOf(50.0));
 
-        when(countrylanguageRepository.save(any(Countrylanguage.class))).thenReturn(countrylanguage);
+        when(countryLanguageRepository.save(any(Countrylanguage.class))).thenReturn(countrylanguage);
 
         Countrylanguage createdCountryLanguage = worldService.createCountryLanguage(countrylanguage);
 
@@ -139,14 +139,12 @@ public class CreateDeleteTests {
         assertEquals(countrylanguage.getIsOfficial(), createdCountryLanguage.getIsOfficial());
         assertEquals(countrylanguage.getPercentage(), createdCountryLanguage.getPercentage());
 
-        verify(countrylanguageRepository, times(1)).save(any(Countrylanguage.class));
+        verify(countryLanguageRepository, times(1)).save(any(Countrylanguage.class));
     }
 
     @Test
     void testDeleteCityById() {
         Integer cityId = 1;
-
-        doNothing().when(cityRepository).deleteById(cityId);
 
         worldService.deleteCityById(cityId);
 
@@ -157,11 +155,18 @@ public class CreateDeleteTests {
     void testDeleteCountryById() {
         Integer countryCode = 1;
 
-        doNothing().when(cityRepository).deleteById(countryCode);
-
         worldService.deleteCountryById(countryCode);
 
         verify(countryRepository, times(1)).deleteById(countryCode);
+    }
+
+    @Test
+    void testDeleteCountryLanguageById() {
+        CountrylanguageId countrylanguageId = new CountrylanguageId();
+
+        worldService.deleteCountryLanguageById(countrylanguageId);
+
+        verify(countryLanguageRepository, times(1)).deleteById(countrylanguageId);
     }
 
     @Test
