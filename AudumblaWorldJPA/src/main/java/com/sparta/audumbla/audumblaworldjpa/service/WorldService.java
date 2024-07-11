@@ -52,5 +52,15 @@ public class WorldService {
                 .filter(city -> district.equalsIgnoreCase(city.getDistrict()))
                 .collect(Collectors.toList());
     }
-    public List<City> getC
+    public List<City> getCitiesByCountryCode(String countryCode) {
+        return cityRepository.findAll().stream()
+                .filter(city -> countryCode.equalsIgnoreCase(city.getCountryCode().getCode()))
+                .collect(Collectors.toList());
+    }
+    public List<City> getCitiesByPopulationBound(int populationLowerBound, int populationUpperBound) {
+        return cityRepository.findAll().stream()
+                .filter(city -> city.getPopulation()>=populationLowerBound)
+                .filter(city -> city.getPopulation()<=populationUpperBound)
+                .collect(Collectors.toList());
+    }
 }

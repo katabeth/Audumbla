@@ -19,9 +19,12 @@ public class CRUDTestsKat {
 
     @Autowired
     WorldService worldService;
-    @Autowired
-    private CityRepository cityRepository;
 
+
+    @Test
+    void test(){
+        List<City> cities = worldService.getAllCities();
+    }
     @Test
     @DisplayName("Test I can Search cities by name")
     void testSearchCitiesByName() {
@@ -37,8 +40,16 @@ public class CRUDTestsKat {
     }
     @Test
     @DisplayName("Test I can Search cities by District")
+    @Transactional
     void testSearchCitiesByDistrict(){
         List<City> test = worldService.getCitiesByDistrict("British Colombia");
         Assertions.assertEquals(9, test.size());
+    }
+    @Test
+    @DisplayName("Test I can Search Cities by PopulationBound")
+    @Transactional
+    void testSearchCitiesByPopulationBound(){
+        List<City> test = worldService.getCitiesByPopulationBound(90000,100000);
+        Assertions.assertEquals(391, test.size());
     }
 }
