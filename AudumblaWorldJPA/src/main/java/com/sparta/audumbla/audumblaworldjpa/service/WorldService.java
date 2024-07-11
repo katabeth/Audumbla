@@ -48,6 +48,47 @@ public class WorldService {
         return cityRepository.findById(id);
     }
 
+    public List<City> getCitiesByDistrict(String district) {
+        return cityRepository.findAll().stream()
+                .filter(city -> district.equalsIgnoreCase(city.getDistrict()))
+                .collect(Collectors.toList());
+    }
+    public List<City> getCitiesByCountryCode(String countryCode) {
+        return cityRepository.findAll().stream()
+                .filter(city -> countryCode.equalsIgnoreCase(city.getCountryCode().getCode()))
+                .collect(Collectors.toList());
+    }
+    public List<City> getCitiesByPopulationBound(int populationLowerBound, int populationUpperBound) {
+        return cityRepository.findAll().stream()
+                .filter(city -> city.getPopulation()>=populationLowerBound)
+                .filter(city -> city.getPopulation()<=populationUpperBound)
+                .collect(Collectors.toList());
+    }
+    //Country - Code, Name, Continent, Region, Surface Area,
+    // IndepYear, Population, LifeExepectancy, GNP, GNPOld, LocalName, Government Form
+
+    public Optional<Country> getCountryByCountryCode(String countryCode) {
+        return countryRepository.findAll().stream()
+                .filter(country -> countryCode.equalsIgnoreCase(country.getCode()))
+                .findFirst();
+    }
+    public List<Country> getCountryByPopulationBound(int populationLowerBound, int populationUpperBound) {
+        return countryRepository.findAll().stream()
+                .filter(country -> country.getPopulation()>=populationLowerBound)
+                .filter(country -> country.getPopulation()<=populationUpperBound)
+                .collect(Collectors.toList());
+    }
+    public List<Country> getCountryByName(String name) {
+        return countryRepository.findAll().stream()
+                .filter(country -> name.equalsIgnoreCase(country.getName()))
+                .collect(Collectors.toList());
+    }
+    public List<Country> getCountryByDistrict(String district) {
+        return countryRepository.findAll().stream()
+                .filter(country -> district.equalsIgnoreCase(country.getRegion()))
+                .collect(Collectors.toList());
+    }
+
     //Create methods
     public City createCity(City city) {
         return cityRepository.save(city);
