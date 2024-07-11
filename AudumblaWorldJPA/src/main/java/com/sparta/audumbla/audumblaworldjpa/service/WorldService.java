@@ -5,11 +5,10 @@ import com.sparta.audumbla.audumblaworldjpa.repositories.CityRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryLanguageRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +17,8 @@ public class WorldService {
     private final CityRepository cityRepository;
     private final CountryRepository countryRepository;
     private final CountryLanguageRepository countryLanguageRepository;
+
+
 
     @Autowired
     public WorldService(CityRepository cityRepository,
@@ -42,15 +43,16 @@ public class WorldService {
     //City - ID, Name, CountryCode, District, Population
     public List<City> getCitiesByName(String name) {
         return cityRepository.findAll().stream()
-                .filter(city -> city.getName().contains(name))
+                .filter(city -> name.equalsIgnoreCase(city.getName()))
                 .collect(Collectors.toList());
     }
     public Optional<City> getCitiesByID(int id) {
         return cityRepository.findById(id);
     }
+
     public List<City> getCitiesByDistrict(String district) {
         return cityRepository.findAll().stream()
-                .filter(city -> city.getDistrict().contains(district))
+                .filter(city -> district.equalsIgnoreCase(city.getDistrict()))
                 .collect(Collectors.toList());
     }
     public List<City> getCitiesByCountryCode(String countryCode) {
@@ -64,9 +66,6 @@ public class WorldService {
                 .filter(city -> city.getPopulation()<=populationUpperBound)
                 .collect(Collectors.toList());
     }
-    //Country - Code, Name, Continent, Region, Surface Area,
-    // IndepYear, Population, LifeExepectancy, GNP, GNPOld, LocalName, Government Form
-    // HeadOfState, Capital, Code2
 
     public Optional<Country> getCountryByCountryCode(String countryCode) {
         return countryRepository.findAll().stream()
@@ -168,14 +167,17 @@ public class WorldService {
 
     //Create methods
     public City createCity(City city) {
+        nullCheck(city);
         return cityRepository.save(city);
     }
 
     public Country createCountry(Country country) {
+        nullCheck(country);
         return countryRepository.save(country);
     }
 
     public Countrylanguage createCountryLanguage(Countrylanguage countryLanguage) {
+        nullCheck(countryLanguage);
         return countryLanguageRepository.save(countryLanguage);
     }
 
@@ -184,8 +186,8 @@ public class WorldService {
         cityRepository.deleteById(id);
     }
 
-    public void deleteCountryById(Integer code) {
-        countryRepository.deleteById(code);
+    public void deleteCountryByCountryCode(String countryCode) {
+        countryRepository.deleteByCode(countryCode);
     }
 
     public void deleteCountryLanguageById(CountrylanguageId id) {
@@ -198,5 +200,33 @@ public class WorldService {
         return allCountries.stream()
                 .filter(country -> country.getHeadOfState() == null || country.getHeadOfState().isEmpty())
                 .collect(Collectors.toList());
+    }
+
+    private void nullCheck(Object input) {
+        if (input == null){
+            throw new IllegalArgumentException("input cannot be null");
+        }
+    }
+
+    public List<String> getAllSmallestDistricts() {
+        return cityRepository.findAll().stream()
+                .collect(Collectors.groupingBy(
+                        City::getDistrict,
+                        Collectors.summingInt(City::getPopulation)
+                ))
+                .entrySet()
+                .stream()
+                .sorted(Comparator.comparingInt(Map.Entry::getValue))
+                .map(Map.Entry::getKey)
+                .toList();
+    }
+
+    public List<String> getFiveSmallestDistricts() {
+        return getSmallestDistrictsLimitedTo(5);
+    }
+
+    public List<String> getSmallestDistrictsLimitedTo(Integer limit){
+        return getAllSmallestDistricts().stream()
+                .limit(5).toList();
     }
 }
