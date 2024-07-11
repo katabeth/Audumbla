@@ -66,9 +66,21 @@ public class WorldService {
     //Country - Code, Name, Continent, Region, Surface Area,
     // IndepYear, Population, LifeExepectancy, GNP, GNPOld, LocalName, Government Form
 
-    public List<Country> getCountryByCountryCode(String countryCode) {
+    public Optional<Country> getCountryByCountryCode(String countryCode) {
         return countryRepository.findAll().stream()
                 .filter(country -> countryCode.equalsIgnoreCase(country.getCode()))
+                .findFirst();
+    }
+    public List<Country> getCountryByPopulationBound(int populationLowerBound, int populationUpperBound) {
+        return countryRepository.findAll().stream()
+                .filter(country -> country.getPopulation()>=populationLowerBound)
+                .filter(country -> country.getPopulation()<=populationUpperBound)
                 .collect(Collectors.toList());
     }
+    public List<Country> getCountryByName(String name) {
+        return countryRepository.findAll().stream()
+                .filter(country -> name.equalsIgnoreCase(country.getName()))
+                .collect(Collectors.toList());
+    }
+    public List
 }
