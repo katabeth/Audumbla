@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Table(name = "country", schema = "world")
@@ -222,7 +223,20 @@ public class Country {
                 '}';
     }
 
-    public String NameToString() {
+    public String nameToString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Country country = (Country) o;
+        return Objects.equals(code, country.code) && Objects.equals(name, country.name) && Objects.equals(continent, country.continent) && Objects.equals(region, country.region) && Objects.equals(surfaceArea, country.surfaceArea) && Objects.equals(indepYear, country.indepYear) && Objects.equals(population, country.population) && Objects.equals(lifeExpectancy, country.lifeExpectancy) && Objects.equals(gnp, country.gnp) && Objects.equals(gNPOld, country.gNPOld) && Objects.equals(localName, country.localName) && Objects.equals(governmentForm, country.governmentForm) && Objects.equals(headOfState, country.headOfState) && Objects.equals(capital, country.capital) && Objects.equals(code2, country.code2);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code, name, continent, region, surfaceArea, indepYear, population, lifeExpectancy, gnp, gNPOld, localName, governmentForm, headOfState, capital, code2);
     }
 }

@@ -29,7 +29,7 @@ public class CalculateTests {
     public void testFindCountryWithMostCities() {
         System.out.println(
                 "The country with the most cities in the database is : "
-                + worldService.findCountryWithMostCities().getKey().NameToString() +
+                + worldService.findCountryWithMostCities().getKey().nameToString() +
                 "\nAnd there are : " + worldService.findCountryWithMostCities().getValue() +
                 " cities");
     }
