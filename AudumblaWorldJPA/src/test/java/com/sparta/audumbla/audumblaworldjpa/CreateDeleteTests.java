@@ -37,16 +37,8 @@ public class CreateDeleteTests {
     @InjectMocks
     private WorldService worldService;
 
-    private City city;
-
     @Autowired
     private WorldService worldServiceReal;
-
-//    @BeforeEach
-//    public void setup() {
-//        MockitoAnnotations.initMocks(this);
-//    }
-
 
     @Test
     void testCreateCity() {
@@ -70,7 +62,6 @@ public class CreateDeleteTests {
 
     @Test
     void testCreateCountry() {
-        // Create a sample Country object
         Country country = new Country();
         country.setCode("TST");
         country.setName("Test Country");
@@ -88,13 +79,10 @@ public class CreateDeleteTests {
         country.setCapital(1);
         country.setCode2("TC");
 
-        // Mock the behavior of countryRepository.save()
         when(countryRepository.save(country)).thenReturn(country);
 
-        // Call the service method to create the country
         Country createdCountry = worldService.createCountry(country);
 
-        // Verify the saved country object matches the expected values
         assertEquals(country.getCode(), createdCountry.getCode());
         assertEquals(country.getName(), createdCountry.getName());
         assertEquals(country.getContinent(), createdCountry.getContinent());
@@ -111,7 +99,6 @@ public class CreateDeleteTests {
         assertEquals(country.getCapital(), createdCountry.getCapital());
         assertEquals(country.getCode2(), createdCountry.getCode2());
 
-        // Verify that countryRepository.save() was called exactly once with any Country object
         verify(countryRepository, times(1)).save(any(Country.class));
     }
 
