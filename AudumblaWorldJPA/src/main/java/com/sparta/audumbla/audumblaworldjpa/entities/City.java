@@ -62,4 +62,8 @@ public class City {
         this.population = population;
     }
 
+    @Override
+    public String toString() {
+        return "CityEntity [id=" + id + ", name=" + name + ", district=" + district + "}";
+    }
 }
