@@ -50,7 +50,7 @@ public class WorldService {
         return cityRepository.findById(id);
     }
 
-    public List<String> getFiveSmallestDistricts() {
+    public List<String> getAllSmallestDistricts() {
         return cityRepository.findAll().stream()
                 .collect(Collectors.groupingBy(
                         City::getDistrict,
@@ -60,7 +60,16 @@ public class WorldService {
                 .stream()
                 .sorted(Comparator.comparingInt(Map.Entry::getValue))
                 .map(Map.Entry::getKey)
-                .limit(5)
                 .toList();
     }
+
+    public List<String> getFiveSmallestDistricts() {
+        return getSmallestDistrictsLimitedTo(5);
+    }
+
+    public List<String> getSmallestDistrictsLimitedTo(Integer limit){
+        return getAllSmallestDistricts().stream()
+                .limit(5).toList();
+    }
+
 }
