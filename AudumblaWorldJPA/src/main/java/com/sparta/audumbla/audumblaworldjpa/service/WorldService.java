@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class WorldService {
@@ -36,4 +38,13 @@ public class WorldService {
         return countryLanguageRepository.findAll();
     }
     // READ individual columns
+    //City - ID, Name, CountryCode, District, Population
+    public List<City> getCitiesByName(String name) {
+        return cityRepository.findAll().stream()
+                .filter(city -> name.equalsIgnoreCase(city.getName()))
+                .collect(Collectors.toList());
+    }
+    public Optional<City> getCitiesByID(int id) {
+        return cityRepository.findById(id);
+    }
 }
