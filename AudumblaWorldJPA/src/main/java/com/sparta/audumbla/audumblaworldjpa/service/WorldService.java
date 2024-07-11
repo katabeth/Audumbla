@@ -7,6 +7,7 @@ import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -71,7 +72,8 @@ public class WorldService {
                 .filter(country -> countryCode.equalsIgnoreCase(country.getCode()))
                 .findFirst();
     }
-    public List<Country> getCountryByPopulationBound(int populationLowerBound, int populationUpperBound) {
+    public List<Country> getCountryByPopulationBound
+            (int populationLowerBound, int populationUpperBound) {
         return countryRepository.findAll().stream()
                 .filter(country -> country.getPopulation()>=populationLowerBound)
                 .filter(country -> country.getPopulation()<=populationUpperBound)
@@ -87,4 +89,35 @@ public class WorldService {
                 .filter(country -> district.equalsIgnoreCase(country.getRegion()))
                 .collect(Collectors.toList());
     }
+    public List<Country> getCountryByContinent(String continent) {
+        return countryRepository.findAll().stream()
+                .filter(country -> continent.equalsIgnoreCase(country.getContinent()))
+                .collect(Collectors.toList());
+    }
+    public List<Country> getCountryBySurfaceArea
+            (double surfaceAreaLowerBoundary, double surfaceAreaUpperBoundary) {
+        return countryRepository.findAll().stream()
+                .filter(country -> country.getSurfaceArea()
+                        .compareTo(BigDecimal.valueOf(surfaceAreaLowerBoundary))>=0)
+                .filter(country -> country.getSurfaceArea()
+                        .compareTo(BigDecimal.valueOf(surfaceAreaLowerBoundary))<=0)
+                .toList();
+    }
+    public List<Country> getCountryByIndepYear(short indepYear) {
+        return countryRepository.findAll().stream()
+                .filter(country -> country.getIndepYear() != null)
+                .filter(country -> country.getIndepYear()==indepYear)
+                .toList();
+    }
+    public List<Country> getCountryByLifeExpectancy
+            (double lifeExpectancyLowerBoundary, double lifeExpectancyUpperBoundary) {
+        return countryRepository.findAll().stream()
+                .filter(country -> country.getLifeExpectancy() != null)
+                .filter(country -> country.getLifeExpectancy()
+                        .compareTo(BigDecimal.valueOf(lifeExpectancyLowerBoundary))>=0)
+                .filter(country -> country.getLifeExpectancy()
+                        .compareTo(BigDecimal.valueOf(lifeExpectancyUpperBoundary))<=0)
+                .toList();
+    }
+    
 }

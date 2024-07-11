@@ -1,6 +1,7 @@
 package com.sparta.audumbla.audumblaworldjpa;
 
 import com.sparta.audumbla.audumblaworldjpa.entities.City;
+import com.sparta.audumbla.audumblaworldjpa.entities.Country;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CityRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryLanguageRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
@@ -51,5 +52,23 @@ public class CRUDTestsKat {
     void testSearchCitiesByPopulationBound(){
         List<City> test = worldService.getCitiesByPopulationBound(90000,100000);
         Assertions.assertEquals(391, test.size());
+    }
+    @Test
+    @DisplayName("Test I can search country by Surface Area")
+    void testSearchCitiesBySurfaceArea(){
+        List<Country> test = worldService.getCountryBySurfaceArea(200.00,300);
+        Assertions.assertEquals(7, test.size());
+    }
+    @Test
+    @DisplayName("Test I can search country by Independace Year")
+    void testSearchCountryByIndepYear(){
+        List<Country> test = worldService.getCountryByIndepYear((short) 1919);
+        Assertions.assertEquals(1, test.size());
+    }
+    @Test
+    @DisplayName("Test I can search country by Life Expectancy")
+    void testSearchCountryByLifeExpectancy(){
+        List<Country> test = worldService.getCountryByLifeExpectancy(70,72);
+        Assertions.assertEquals(25, test.size());
     }
 }
