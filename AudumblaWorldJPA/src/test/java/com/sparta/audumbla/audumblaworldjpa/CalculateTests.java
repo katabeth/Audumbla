@@ -1,9 +1,14 @@
 package com.sparta.audumbla.audumblaworldjpa;
 
+import com.sparta.audumbla.audumblaworldjpa.entities.Country;
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 public class CalculateTests {
@@ -17,16 +22,22 @@ public class CalculateTests {
         System.out.println(
                 worldService.calculatePopulationPercentageInLargestCityByCountryName(countryName) +
                 "% of the population lives in " + countryName +
-                "s the largest city");
+                "'s largest city");
     }
 
     @Test
     public void testFindCountryWithMostCities() {
         System.out.println(
-                "The country with the most cities in the database is: "
+                "The country with the most cities in the database is : "
                 + worldService.findCountryWithMostCities().getKey().NameToString() +
-                "\n And there are : " + worldService.findCountryWithMostCities().getValue() +
+                "\nAnd there are : " + worldService.findCountryWithMostCities().getValue() +
                 " cities");
+    }
+
+    @Test
+    void testGetCountriesWithoutHeadOfState() {
+        List<Country> result = worldService.getCountriesWithoutHeadOfState();
+        assertEquals(3, result.size());
     }
 
 }

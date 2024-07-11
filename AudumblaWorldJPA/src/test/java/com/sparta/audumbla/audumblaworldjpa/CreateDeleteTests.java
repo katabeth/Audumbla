@@ -166,10 +166,4 @@ public class CreateDeleteTests {
 
         verify(countryLanguageRepository, times(1)).deleteById(countrylanguageId);
     }
-
-    @Test
-    void testGetCountriesWithoutHeadOfState() {
-        List<Country> result = worldServiceReal.getCountriesWithoutHeadOfState();
-        assertEquals(3, result.size());
-    }
 }
