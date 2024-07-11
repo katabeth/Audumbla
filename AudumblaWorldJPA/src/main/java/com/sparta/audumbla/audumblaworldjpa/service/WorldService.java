@@ -42,7 +42,7 @@ public class WorldService {
     //City - ID, Name, CountryCode, District, Population
     public List<City> getCitiesByName(String name) {
         return cityRepository.findAll().stream()
-                .filter(city -> name.equalsIgnoreCase(city.getName()))
+                .filter(city -> city.getName().contains(name))
                 .collect(Collectors.toList());
     }
     public Optional<City> getCitiesByID(int id) {
@@ -50,7 +50,7 @@ public class WorldService {
     }
     public List<City> getCitiesByDistrict(String district) {
         return cityRepository.findAll().stream()
-                .filter(city -> district.equalsIgnoreCase(city.getDistrict()))
+                .filter(city -> city.getDistrict().contains(district))
                 .collect(Collectors.toList());
     }
     public List<City> getCitiesByCountryCode(String countryCode) {
@@ -66,6 +66,7 @@ public class WorldService {
     }
     //Country - Code, Name, Continent, Region, Surface Area,
     // IndepYear, Population, LifeExepectancy, GNP, GNPOld, LocalName, Government Form
+    // HeadOfState, Capital, Code2
 
     public Optional<Country> getCountryByCountryCode(String countryCode) {
         return countryRepository.findAll().stream()
@@ -81,17 +82,17 @@ public class WorldService {
     }
     public List<Country> getCountryByName(String name) {
         return countryRepository.findAll().stream()
-                .filter(country -> name.equalsIgnoreCase(country.getName()))
+                .filter(country -> country.getName().contains(name))
                 .collect(Collectors.toList());
     }
     public List<Country> getCountryByDistrict(String district) {
         return countryRepository.findAll().stream()
-                .filter(country -> district.equalsIgnoreCase(country.getRegion()))
+                .filter(country -> country.getRegion().contains(district))
                 .collect(Collectors.toList());
     }
     public List<Country> getCountryByContinent(String continent) {
         return countryRepository.findAll().stream()
-                .filter(country -> continent.equalsIgnoreCase(country.getContinent()))
+                .filter(country -> country.getContinent().contains(continent))
                 .collect(Collectors.toList());
     }
     public List<Country> getCountryBySurfaceArea
@@ -119,7 +120,52 @@ public class WorldService {
                         .compareTo(BigDecimal.valueOf(lifeExpectancyUpperBoundary))<=0)
                 .toList();
     }
-    
+    public List<Country> getCountryByGNP(double gnpLowerBoundary, double gnpUpperBoundary) {
+        return countryRepository.findAll().stream()
+                .filter(country -> country.getGnp()
+                        .compareTo(BigDecimal.valueOf(gnpLowerBoundary))>=0)
+                .filter(country -> country.getGnp()
+                        .compareTo(BigDecimal.valueOf(gnpUpperBoundary))<=0)
+                .toList();
+    }
+    public List<Country> getCountryByGNPOld(double gnpLowerBoundary, double gnpUpperBoundary) {
+        return countryRepository.findAll().stream()
+                .filter(country -> country.getGNPOld() != null)
+                .filter(country -> country.getGNPOld()
+                        .compareTo(BigDecimal.valueOf(gnpLowerBoundary))>=0)
+                .filter(country -> country.getGNPOld()
+                        .compareTo(BigDecimal.valueOf(gnpUpperBoundary))<=0)
+                .toList();
+    }
+    public List<Country> getCountryByLocalName(String localName) {
+        return countryRepository.findAll().stream()
+                .filter(country -> localName.equalsIgnoreCase(country.getLocalName()))
+                .toList();
+    }
+    public List<Country> getCountryByGovernmentForm(String governmentForm) {
+        return countryRepository.findAll().stream()
+                .filter(country -> country.getGovernmentForm().contains(governmentForm))
+                .toList();
+    }
+    public List<Country> getCountryByHeadOfState(String headOfState){
+        return countryRepository.findAll().stream()
+                .filter(country -> country.getHeadOfState() != null)
+                .filter(country -> country.getHeadOfState().contains(headOfState))
+                .toList();
+    }
+    public List<Country> getCountryByCapital(int capital){
+        return countryRepository.findAll().stream()
+                .filter(country -> country.getCapital() != null)
+                .filter(country -> country.getCapital().equals(capital))
+                .toList();
+    }
+    public Optional<Country> getCountryByShortCode(String shortCode){
+        return countryRepository.findAll().stream()
+                .filter(country -> shortCode.equalsIgnoreCase(country.getCode2())).findFirst();
+    }
+    // Languages
+    // CountryCode, Language, IsOfficial,Percentage
+
 
     //Create methods
     public City createCity(City city) {

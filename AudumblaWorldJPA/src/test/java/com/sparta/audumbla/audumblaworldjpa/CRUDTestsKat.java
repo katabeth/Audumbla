@@ -54,6 +54,13 @@ public class CRUDTestsKat {
         Assertions.assertEquals(391, test.size());
     }
     @Test
+    @DisplayName("Test I can Search Cities by Country Code")
+    void testSearchCitiesByCountryCode(){
+        List<City> test = worldService.getCitiesByCountryCode("USA");
+        Assertions.assertEquals(274, test.size());
+    }
+
+    @Test
     @DisplayName("Test I can search country by Surface Area")
     void testSearchCitiesBySurfaceArea(){
         List<Country> test = worldService.getCountryBySurfaceArea(200.00,300);
@@ -71,4 +78,57 @@ public class CRUDTestsKat {
         List<Country> test = worldService.getCountryByLifeExpectancy(70,72);
         Assertions.assertEquals(25, test.size());
     }
+
+    @Test
+    @DisplayName("GetCountryByGNP")
+    void GetCountryByGNP() {
+        List<Country> test = worldService.getCountryByGNP(100,150);
+        Assertions.assertEquals(5, test.size());
+    }
+
+    @Test
+    @DisplayName("GetCountryByGNPOld")
+    void GetCountryByGNPOld() {
+        List<Country> test = worldService.getCountryByGNPOld(1000,1500);
+        Assertions.assertEquals(9, test.size());
+    }
+
+    @Test
+    @DisplayName("GetCountryByLocalName")
+    void GetCountryByLocalName() {
+        List<Country> test = worldService.getCountryByLocalName("France");
+        Assertions.assertEquals(1, test.size());
+    }
+
+    @Test
+    @DisplayName("GetCountryByGovernmentForm")
+    void GetCountryByGovernmentForm() {
+        List<Country> test = worldService.getCountryByGovernmentForm("Republic");
+        Assertions.assertEquals(122, test.size());
+    }
+
+    @Test
+    @DisplayName("TestI can search country by Head of State")
+    void TestSearchCountryByHeadOfState() {
+        List<Country> test = worldService.getCountryByHeadOfState("Elisabeth");
+        Assertions.assertEquals(35, test.size());
+    }
+    @Test
+    @DisplayName("Test getCountryByCountryCode")
+    void getCountryByCountryCode() {
+
+    }
+    @Test
+    @DisplayName("Test getCountryByPopulationBound")
+            void getCountryByPopulationBound() {
+        
+    }
+
+
+    getCountryByPopulationBound
+    getCountryByName
+    getCountryByDistrict
+    getCountryByContinent
+    getCountryByCapital
+    getCountryByShortCode
 }
