@@ -47,4 +47,28 @@ public class WorldService {
     public Optional<City> getCitiesByID(int id) {
         return cityRepository.findById(id);
     }
+    public List<City> getCitiesByDistrict(String district) {
+        return cityRepository.findAll().stream()
+                .filter(city -> district.equalsIgnoreCase(city.getDistrict()))
+                .collect(Collectors.toList());
+    }
+    public List<City> getCitiesByCountryCode(String countryCode) {
+        return cityRepository.findAll().stream()
+                .filter(city -> countryCode.equalsIgnoreCase(city.getCountryCode().getCode()))
+                .collect(Collectors.toList());
+    }
+    public List<City> getCitiesByPopulationBound(int populationLowerBound, int populationUpperBound) {
+        return cityRepository.findAll().stream()
+                .filter(city -> city.getPopulation()>=populationLowerBound)
+                .filter(city -> city.getPopulation()<=populationUpperBound)
+                .collect(Collectors.toList());
+    }
+    //Country - Code, Name, Continent, Region, Surface Area,
+    // IndepYear, Population, LifeExepectancy, GNP, GNPOld, LocalName, Government Form
+
+    public List<Country> getCountryByCountryCode(String countryCode) {
+        return countryRepository.findAll().stream()
+                .filter(country -> countryCode.equalsIgnoreCase(country.getCode()))
+                .collect(Collectors.toList());
+    }
 }
