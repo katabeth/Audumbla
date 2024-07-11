@@ -15,10 +15,8 @@ import java.util.List;
 
 import static com.sparta.audumbla.audumblaworldjpa.testUtils.createCity;
 
-@SpringBootTest
-public class fiveSmallestDistrictsWorldServiceTests {
-    @Autowired
-    WorldService worldService;
+
+public class fiveSmallestDistrictsWorldServiceTests extends WorldServiceTest {
 
     private final List<City> testCities = Arrays.asList(
             createCity(1, "CityA", "DistrictA", 1000),

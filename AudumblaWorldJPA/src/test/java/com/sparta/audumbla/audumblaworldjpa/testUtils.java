@@ -1,6 +1,7 @@
 package com.sparta.audumbla.audumblaworldjpa;
 
 import com.sparta.audumbla.audumblaworldjpa.entities.City;
+import com.sparta.audumbla.audumblaworldjpa.entities.Country;
 
 public class testUtils {
 
@@ -12,5 +13,4 @@ public class testUtils {
         city.setPopulation(population);
         return city;
     }
-
 }
