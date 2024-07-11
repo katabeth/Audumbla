@@ -4,9 +4,11 @@ import com.sparta.audumbla.audumblaworldjpa.entities.*;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CityRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryLanguageRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -238,7 +240,12 @@ public class WorldService {
         }
     }
 
-    public List<String> getAllSmallestDistricts() {
+    public List<String> getFiveSmallestDistricts() {
+        return getSmallestDistrictsLimitedTo(5);
+    }
+
+    public List<String> getAllSmallestDistrictsInOrder() {
+
         return cityRepository.findAll().stream()
                 .collect(Collectors.groupingBy(
                         City::getDistrict,
@@ -251,6 +258,35 @@ public class WorldService {
                 .toList();
     }
 
+
+    public List<String> getSmallestDistrictsLimitedTo(Integer limit){
+        return getAllSmallestDistrictsInOrder().stream()
+                .limit(5).toList();
+    }
+
+    @Transactional
+    public Object getCountriesMainLanguageSpeakers(String countryCode) {
+        Country country = getCountryByCountryCode(countryCode).orElseThrow();
+        BigDecimal population = BigDecimal.valueOf(country.getPopulation());
+        var test = getLanguagesByCountry(country).stream()
+                .map(
+                        language -> (language.getPercentage()
+                                .divide(BigDecimal.valueOf(100))
+                                .multiply(population))
+                                .intValue()
+
+                )
+                .sorted()
+                .toList();
+        return test.getLast();
+    }
+
+    @Transactional
+    public List<Countrylanguage> getLanguagesByCountry(Country country){
+        return getAllCountryLanguages().stream()
+                .filter(language -> language.getCountryCode().equals(country))
+                .toList();
+
     public List<String> getFiveSmallestDistricts() {
         return getSmallestDistrictsLimitedTo(5);
     }
@@ -258,5 +294,6 @@ public class WorldService {
     public List<String> getSmallestDistrictsLimitedTo(Integer limit){
         return getAllSmallestDistricts().stream()
                 .limit(5).toList();
+
     }
 }
