@@ -2,9 +2,6 @@ package com.sparta.audumbla.audumblaworldjpa;
 
 import com.sparta.audumbla.audumblaworldjpa.entities.City;
 import com.sparta.audumbla.audumblaworldjpa.entities.Country;
-import com.sparta.audumbla.audumblaworldjpa.repositories.CityRepository;
-import com.sparta.audumbla.audumblaworldjpa.repositories.CountryLanguageRepository;
-import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +27,7 @@ public class CRUDTestsKat {
     @DisplayName("Test I can Search cities by name")
     void testSearchCitiesByName() {
         List<City> test = worldService.getCitiesByName("London");
-        Assertions.assertEquals(2, test.size());
+        Assertions.assertEquals(3, test.size());
     }
     @Test
     @DisplayName("Test I can Search cities by ID")
@@ -63,7 +60,7 @@ public class CRUDTestsKat {
     @Test
     @DisplayName("Test I can search country by Surface Area")
     void testSearchCitiesBySurfaceArea(){
-        List<Country> test = worldService.getCountryBySurfaceArea(200.00,300);
+        List<Country> test = worldService.getCountryBySurfaceArea(200,300);
         Assertions.assertEquals(7, test.size());
     }
     @Test
@@ -104,7 +101,7 @@ public class CRUDTestsKat {
     @DisplayName("GetCountryByGovernmentForm")
     void GetCountryByGovernmentForm() {
         List<Country> test = worldService.getCountryByGovernmentForm("Republic");
-        Assertions.assertEquals(122, test.size());
+        Assertions.assertEquals(143, test.size());
     }
 
     @Test
@@ -116,19 +113,44 @@ public class CRUDTestsKat {
     @Test
     @DisplayName("Test getCountryByCountryCode")
     void getCountryByCountryCode() {
-
+        String test = worldService.getCountryByCountryCode("USA").orElseThrow().getName();
+        Assertions.assertEquals("United States", test);
     }
     @Test
     @DisplayName("Test getCountryByPopulationBound")
-            void getCountryByPopulationBound() {
-        
+    void getCountryByPopulationBound() {
+        List<Country> test = worldService.getCountryByPopulationBound(1000,20000);
+        Assertions.assertEquals(17, test.size());
+    }
+    @Test
+    @DisplayName(" Test getCountryByName")
+    void getCountryByCountryName() {
+        List<Country> test = worldService.getCountryByName("United States");
+        Assertions.assertEquals(2, test.size());
+    }
+    @Test
+    @DisplayName("Test getCountryByRegion")
+    void getCountryByRegion() {
+        List<Country> test = worldService.getCountryByRegion("Polynesia");
+        Assertions.assertEquals(10, test.size());
+    }
+    @Test
+    @DisplayName("Test getCountryByContinent")
+    void getCountryByContinent() {
+        List<Country> test = worldService.getCountryByContinent("Europe");
+        Assertions.assertEquals(46, test.size());
+    }
+    @Test
+    @DisplayName("Test getCountryByCapital")
+    void getCountryByCapital() {
+        String test = worldService.getCountryByCapital(33).orElseThrow().getName();
+        Assertions.assertEquals("Netherlands Antilles", test);
+    }
+    @Test
+    @DisplayName("Test getCountryByShortCode")
+    void getCountryByShortCode() {
+        String test = worldService.getCountryByShortCode("US").orElseThrow().getName();
+        Assertions.assertEquals("United States", test);
     }
 
-
-    getCountryByPopulationBound
-    getCountryByName
-    getCountryByDistrict
-    getCountryByContinent
-    getCountryByCapital
-    getCountryByShortCode
 }

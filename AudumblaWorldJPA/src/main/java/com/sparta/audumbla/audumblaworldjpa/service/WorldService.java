@@ -85,9 +85,9 @@ public class WorldService {
                 .filter(country -> country.getName().contains(name))
                 .collect(Collectors.toList());
     }
-    public List<Country> getCountryByDistrict(String district) {
+    public List<Country> getCountryByRegion(String region) {
         return countryRepository.findAll().stream()
-                .filter(country -> country.getRegion().contains(district))
+                .filter(country -> country.getRegion().contains(region))
                 .collect(Collectors.toList());
     }
     public List<Country> getCountryByContinent(String continent) {
@@ -101,7 +101,7 @@ public class WorldService {
                 .filter(country -> country.getSurfaceArea()
                         .compareTo(BigDecimal.valueOf(surfaceAreaLowerBoundary))>=0)
                 .filter(country -> country.getSurfaceArea()
-                        .compareTo(BigDecimal.valueOf(surfaceAreaLowerBoundary))<=0)
+                        .compareTo(BigDecimal.valueOf(surfaceAreaUpperBoundary))<=0)
                 .toList();
     }
     public List<Country> getCountryByIndepYear(short indepYear) {
@@ -153,11 +153,10 @@ public class WorldService {
                 .filter(country -> country.getHeadOfState().contains(headOfState))
                 .toList();
     }
-    public List<Country> getCountryByCapital(int capital){
+    public Optional<Country> getCountryByCapital(int capital){
         return countryRepository.findAll().stream()
                 .filter(country -> country.getCapital() != null)
-                .filter(country -> country.getCapital().equals(capital))
-                .toList();
+                .filter(country -> country.getCapital().equals(capital)).findFirst();
     }
     public Optional<Country> getCountryByShortCode(String shortCode){
         return countryRepository.findAll().stream()
