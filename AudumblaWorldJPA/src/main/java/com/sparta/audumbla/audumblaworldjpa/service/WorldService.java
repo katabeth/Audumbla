@@ -282,18 +282,10 @@ public class WorldService {
     }
 
     @Transactional
-    public List<Countrylanguage> getLanguagesByCountry(Country country){
+    public List<Countrylanguage> getLanguagesByCountry(Country country) {
         return getAllCountryLanguages().stream()
                 .filter(language -> language.getCountryCode().equals(country))
                 .toList();
-
-    public List<String> getFiveSmallestDistricts() {
-        return getSmallestDistrictsLimitedTo(5);
-    }
-
-    public List<String> getSmallestDistrictsLimitedTo(Integer limit){
-        return getAllSmallestDistricts().stream()
-                .limit(5).toList();
 
     }
 }
