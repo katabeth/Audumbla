@@ -47,6 +47,7 @@ public class WorldService {
     public Optional<City> getCitiesByID(int id) {
         return cityRepository.findById(id);
     }
+
     public List<City> getCitiesByDistrict(String district) {
         return cityRepository.findAll().stream()
                 .filter(city -> district.equalsIgnoreCase(city.getDistrict()))
@@ -85,6 +86,40 @@ public class WorldService {
     public List<Country> getCountryByDistrict(String district) {
         return countryRepository.findAll().stream()
                 .filter(country -> district.equalsIgnoreCase(country.getRegion()))
+                .collect(Collectors.toList());
+    }
+
+    //Create methods
+    public City createCity(City city) {
+        return cityRepository.save(city);
+    }
+
+    public Country createCountry(Country country) {
+        return countryRepository.save(country);
+    }
+
+    public Countrylanguage createCountryLanguage(Countrylanguage countryLanguage) {
+        return countryLanguageRepository.save(countryLanguage);
+    }
+
+    //Delete methods
+    public void deleteCityById(Integer id) {
+        cityRepository.deleteById(id);
+    }
+
+    public void deleteCountryById(Integer code) {
+        countryRepository.deleteById(code);
+    }
+
+    public void deleteCountryLanguageById(CountrylanguageId id) {
+        countryLanguageRepository.deleteById(id);
+    }
+
+    //Specifically required CRUD methods
+    public List<Country> getCountriesWithoutHeadOfState() {
+        List<Country> allCountries = countryRepository.findAll();
+        return allCountries.stream()
+                .filter(country -> country.getHeadOfState() == null || country.getHeadOfState().isEmpty())
                 .collect(Collectors.toList());
     }
 }
