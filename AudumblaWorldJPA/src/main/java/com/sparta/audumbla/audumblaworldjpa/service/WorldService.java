@@ -163,8 +163,38 @@ public class WorldService {
     }
     // Languages
     // CountryCode, Language, IsOfficial,Percentage
+    public List<Countrylanguage> getCountryLanguageByCountryCode(String countryCode){
+        return countryLanguageRepository.findAll().stream()
+                .filter(language-> countryCode.equalsIgnoreCase(language.getCountryCode().getCode()))
+                .toList();
+    }
+    public List<Countrylanguage> getCountryLanguageByLanguage(String language){
+        return countryLanguageRepository.findAll().stream()
+                .filter(countrylanguage -> countrylanguage.getId().getLanguage().contains(language))
+                .toList();
+    }
+    public List<Countrylanguage> getCountryLanguageByIsOfficial(boolean isOfficial){
+        String condition = "";
+        if (isOfficial) {
+            condition = "T";
+        } else {
+            condition = "F";
+        }
+        String finalCondition = condition;
+        return countryLanguageRepository.findAll().stream()
+                .filter(countrylanguage -> countrylanguage.getIsOfficial().equalsIgnoreCase(finalCondition))
+                .toList();
+    }
+    public List<Countrylanguage> getCountryLanguageByPercentage
+            (double percentageLowerBoundary, double percentageUpperBoundary){
+        return countryLanguageRepository.findAll().stream()
+                .filter(countrylanguage -> countrylanguage.getPercentage()
+                        .compareTo(BigDecimal.valueOf(percentageLowerBoundary))>=0)
+                .filter(countrylanguage -> countrylanguage.getPercentage()
+                        .compareTo(BigDecimal.valueOf(percentageUpperBoundary))<=0)
+                .toList();
 
-
+    }
     //Create methods
     public City createCity(City city) {
         nullCheck(city);

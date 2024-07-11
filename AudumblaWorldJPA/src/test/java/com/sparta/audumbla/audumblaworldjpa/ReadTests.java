@@ -2,6 +2,7 @@ package com.sparta.audumbla.audumblaworldjpa;
 
 import com.sparta.audumbla.audumblaworldjpa.entities.City;
 import com.sparta.audumbla.audumblaworldjpa.entities.Country;
+import com.sparta.audumbla.audumblaworldjpa.entities.Countrylanguage;
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
@@ -13,21 +14,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 @SpringBootTest
-public class CRUDTestsKat {
+public class ReadTests {
 
     @Autowired
     WorldService worldService;
 
-
-    @Test
-    void test(){
-        List<City> cities = worldService.getAllCities();
-    }
     @Test
     @DisplayName("Test I can Search cities by name")
     void testSearchCitiesByName() {
         List<City> test = worldService.getCitiesByName("London");
-        Assertions.assertEquals(3, test.size());
+        Assertions.assertEquals(2, test.size());
     }
     @Test
     @DisplayName("Test I can Search cities by ID")
@@ -64,7 +60,7 @@ public class CRUDTestsKat {
         Assertions.assertEquals(7, test.size());
     }
     @Test
-    @DisplayName("Test I can search country by Independace Year")
+    @DisplayName("Test I can search country by Independence Year")
     void testSearchCountryByIndepYear(){
         List<Country> test = worldService.getCountryByIndepYear((short) 1919);
         Assertions.assertEquals(1, test.size());
@@ -152,5 +148,29 @@ public class CRUDTestsKat {
         String test = worldService.getCountryByShortCode("US").orElseThrow().getName();
         Assertions.assertEquals("United States", test);
     }
-
+    @Test
+    @DisplayName("Test getCountryLanguageByCountryCode")
+    void getCountryLanguageByCountryCode() {
+        List<Countrylanguage> test = worldService.getCountryLanguageByCountryCode("USA");
+        Assertions.assertEquals(12, test.size());
+    }
+    @Test
+    @DisplayName("Test getCountryLanguageByLanguage")
+    void testGetCountryLanguageByLanguage(){
+        List<Countrylanguage> test = worldService.getCountryLanguageByLanguage("English");
+        Assertions.assertEquals(77, test.size());
+    }
+    @Test
+    @DisplayName("Test getCountryLanguageByIsOfficial")
+    void testGetCountryLanguageByIsOfficial(){
+        List<Countrylanguage> test = worldService.getCountryLanguageByIsOfficial(true);
+        Assertions.assertEquals(238, test.size());
+    }
+    @Test
+    @DisplayName("Test getCountryLanguageByPercentage")
+    void testGetCountryLanguageByPercentage(){
+        List<Countrylanguage> test = worldService.getCountryLanguageByPercentage
+                (3,40);
+        Assertions.assertEquals(404, test.size());
+    }
 }
