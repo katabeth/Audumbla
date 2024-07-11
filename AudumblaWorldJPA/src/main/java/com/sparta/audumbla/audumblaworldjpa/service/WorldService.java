@@ -91,14 +91,17 @@ public class WorldService {
 
     //Create methods
     public City createCity(City city) {
+        nullCheck(city);
         return cityRepository.save(city);
     }
 
     public Country createCountry(Country country) {
+        nullCheck(country);
         return countryRepository.save(country);
     }
 
     public Countrylanguage createCountryLanguage(Countrylanguage countryLanguage) {
+        nullCheck(countryLanguage);
         return countryLanguageRepository.save(countryLanguage);
     }
 
@@ -107,8 +110,8 @@ public class WorldService {
         cityRepository.deleteById(id);
     }
 
-    public void deleteCountryById(Integer code) {
-        countryRepository.deleteById(code);
+    public void deleteCountryByCountryCode(String countryCode) {
+        countryRepository.deleteByCode(countryCode);
     }
 
     public void deleteCountryLanguageById(CountrylanguageId id) {
@@ -121,5 +124,11 @@ public class WorldService {
         return allCountries.stream()
                 .filter(country -> country.getHeadOfState() == null || country.getHeadOfState().isEmpty())
                 .collect(Collectors.toList());
+    }
+
+    private void nullCheck(Object input) {
+        if (input == null){
+            throw new IllegalArgumentException("input cannot be null");
+        }
     }
 }

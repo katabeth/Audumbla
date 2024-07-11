@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -58,6 +59,16 @@ public class CreateDeleteTests {
         assertEquals(city.getPopulation(), createdCity.getPopulation());
 
         verify(cityRepository, times(1)).save(city);
+    }
+
+    @Test
+    void checkIfNullIsDetected() {
+        City city = null;
+
+        when(cityRepository.save(city)).thenReturn(city);
+
+        assertThrows(IllegalArgumentException.class, () -> worldService.createCity(city));
+        verify(cityRepository, never()).save(city);
     }
 
     @Test
@@ -140,11 +151,11 @@ public class CreateDeleteTests {
 
     @Test
     void testDeleteCountryById() {
-        Integer countryCode = 1;
+        String countryCode = "ABC";
 
-        worldService.deleteCountryById(countryCode);
+        worldService.deleteCountryByCountryCode(countryCode);
 
-        verify(countryRepository, times(1)).deleteById(countryCode);
+        verify(countryRepository, times(1)).deleteByCode(countryCode);
     }
 
     @Test
