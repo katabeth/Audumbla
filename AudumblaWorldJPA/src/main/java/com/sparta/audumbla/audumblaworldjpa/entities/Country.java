@@ -223,6 +223,10 @@ public class Country {
                 '}';
     }
 
+    public String nameToString() {
+        return name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
