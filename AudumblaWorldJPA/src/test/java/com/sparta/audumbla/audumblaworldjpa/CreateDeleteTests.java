@@ -153,7 +153,16 @@ public class CreateDeleteTests {
         verify(cityRepository, times(1)).deleteById(cityId);
     }
 
+    @Test
+    void testDeleteCountryById() {
+        Integer countryCode = 1;
 
+        doNothing().when(cityRepository).deleteById(countryCode);
+
+        worldService.deleteCountryById(countryCode);
+
+        verify(countryRepository, times(1)).deleteById(countryCode);
+    }
 
     @Test
     void testGetCountriesWithoutHeadOfState() {
