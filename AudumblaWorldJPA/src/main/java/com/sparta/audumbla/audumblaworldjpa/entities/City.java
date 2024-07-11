@@ -30,6 +30,20 @@ public class City {
     @Column(name = "Population", nullable = false)
     private Integer population;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ColumnDefault("''")
+    @JoinColumn(name = "CountryCode", nullable = false)
+    private Country countryCode;
+
+    public Country getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(Country countryCode) {
+        this.countryCode = countryCode;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -64,6 +78,12 @@ public class City {
 
     @Override
     public String toString() {
-        return "CityEntity [id=" + id + ", name=" + name + ", district=" + district + "}";
+        return "City{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", district='" + district + '\'' +
+                ", population=" + population +
+                ", countryCode=" + countryCode +
+                '}';
     }
 }

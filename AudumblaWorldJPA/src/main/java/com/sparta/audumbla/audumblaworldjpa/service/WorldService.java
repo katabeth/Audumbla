@@ -47,4 +47,10 @@ public class WorldService {
     public Optional<City> getCitiesByID(int id) {
         return cityRepository.findById(id);
     }
+    public List<City> getCitiesByDistrict(String district) {
+        return cityRepository.findAll().stream()
+                .filter(city -> district.equalsIgnoreCase(city.getDistrict()))
+                .collect(Collectors.toList());
+    }
+    public List<City> getC
 }

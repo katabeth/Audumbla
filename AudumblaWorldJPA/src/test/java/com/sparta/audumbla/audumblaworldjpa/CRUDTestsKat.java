@@ -19,6 +19,8 @@ public class CRUDTestsKat {
 
     @Autowired
     WorldService worldService;
+    @Autowired
+    private CityRepository cityRepository;
 
     @Test
     @DisplayName("Test I can Search cities by name")
@@ -30,6 +32,13 @@ public class CRUDTestsKat {
     @DisplayName("Test I can Search cities by ID")
     void testSearchCitiesById() {
 
+        String test = worldService.getCitiesByID(2912).orElseThrow().getName();
+        Assertions.assertEquals("Adamstown", test);
     }
-
+    @Test
+    @DisplayName("Test I can Search cities by District")
+    void testSearchCitiesByDistrict(){
+        List<City> test = worldService.getCitiesByDistrict("British Colombia");
+        Assertions.assertEquals(9, test.size());
+    }
 }
