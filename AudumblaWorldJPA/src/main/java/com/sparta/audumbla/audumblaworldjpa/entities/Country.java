@@ -221,4 +221,8 @@ public class Country {
                 ", code2='" + code2 + '\'' +
                 '}';
     }
+
+    public String NameToString() {
+        return name;
+    }
 }

@@ -7,8 +7,9 @@ import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -124,6 +125,45 @@ public class WorldService {
         return allCountries.stream()
                 .filter(country -> country.getHeadOfState() == null || country.getHeadOfState().isEmpty())
                 .collect(Collectors.toList());
+    }
+
+    public BigDecimal calculatePopulationPercentageInLargestCityByCountryName(String countryName) {
+        Optional<Country> countryOptional = getFirstCountryByName(countryName);
+        Country country = countryOptional.orElseThrow(() -> new IllegalArgumentException("Country with the specified name not found"));
+
+        List<City> cities = cityRepository.findAll().stream()
+                .filter(city -> country.getCode().equalsIgnoreCase(city.getCountryCode().getCode()))
+                .toList();
+
+        City largestCity = cities.stream()
+                .max(Comparator.comparing(City::getPopulation))
+                .orElseThrow(() -> new IllegalArgumentException("No cities found for the country"));
+
+        return BigDecimal.valueOf(largestCity.getPopulation())
+                .divide(BigDecimal.valueOf(country.getPopulation()), 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
+    }
+
+    public Optional<Country> getFirstCountryByName(String countryName) {
+        return countryRepository.findAll().stream()
+                .filter(country -> countryName.equalsIgnoreCase(country.getName()))
+                .findFirst();
+    }
+
+    public Map.Entry<Country, Long> findCountryWithMostCities() {
+        List<City> cities = cityRepository.findAll();
+
+        Map<String, Long> countryCityCountMap = cities.stream()
+                .collect(Collectors.groupingBy(city -> city.getCountryCode().getCode(), Collectors.counting()));
+
+        Map.Entry<String, Long> maxEntry = countryCityCountMap.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .orElseThrow(() -> new NoSuchElementException("No cities found"));
+
+        Country country = getCountryByCountryCode(maxEntry.getKey())
+                .orElseThrow(() -> new IllegalArgumentException("Country not found"));
+
+        return new AbstractMap.SimpleEntry<>(country, maxEntry.getValue());
     }
 
     private void nullCheck(Object input) {
