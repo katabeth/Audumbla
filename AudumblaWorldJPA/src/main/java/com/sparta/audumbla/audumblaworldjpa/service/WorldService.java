@@ -49,7 +49,89 @@ public class WorldService {
     public Optional<City> getCitiesByID(int id) {
         return cityRepository.findById(id);
     }
+  
+    public List<City> getCitiesByDistrict(String district) {
+        return cityRepository.findAll().stream()
+                .filter(city -> district.equalsIgnoreCase(city.getDistrict()))
+                .collect(Collectors.toList());
+    }
+    public List<City> getCitiesByCountryCode(String countryCode) {
+        return cityRepository.findAll().stream()
+                .filter(city -> countryCode.equalsIgnoreCase(city.getCountryCode().getCode()))
+                .collect(Collectors.toList());
+    }
+    public List<City> getCitiesByPopulationBound(int populationLowerBound, int populationUpperBound) {
+        return cityRepository.findAll().stream()
+                .filter(city -> city.getPopulation()>=populationLowerBound)
+                .filter(city -> city.getPopulation()<=populationUpperBound)
+                .collect(Collectors.toList());
+    }
 
+    public Optional<Country> getCountryByCountryCode(String countryCode) {
+        return countryRepository.findAll().stream()
+                .filter(country -> countryCode.equalsIgnoreCase(country.getCode()))
+                .findFirst();
+    }
+    public List<Country> getCountryByPopulationBound(int populationLowerBound, int populationUpperBound) {
+        return countryRepository.findAll().stream()
+                .filter(country -> country.getPopulation()>=populationLowerBound)
+                .filter(country -> country.getPopulation()<=populationUpperBound)
+                .collect(Collectors.toList());
+    }
+    public List<Country> getCountryByName(String name) {
+        return countryRepository.findAll().stream()
+                .filter(country -> name.equalsIgnoreCase(country.getName()))
+                .collect(Collectors.toList());
+    }
+    public List<Country> getCountryByDistrict(String district) {
+        return countryRepository.findAll().stream()
+                .filter(country -> district.equalsIgnoreCase(country.getRegion()))
+                .collect(Collectors.toList());
+    }
+
+    //Create methods
+    public City createCity(City city) {
+        nullCheck(city);
+        return cityRepository.save(city);
+    }
+
+    public Country createCountry(Country country) {
+        nullCheck(country);
+        return countryRepository.save(country);
+    }
+
+    public Countrylanguage createCountryLanguage(Countrylanguage countryLanguage) {
+        nullCheck(countryLanguage);
+        return countryLanguageRepository.save(countryLanguage);
+    }
+
+    //Delete methods
+    public void deleteCityById(Integer id) {
+        cityRepository.deleteById(id);
+    }
+
+    public void deleteCountryByCountryCode(String countryCode) {
+        countryRepository.deleteByCode(countryCode);
+    }
+
+    public void deleteCountryLanguageById(CountrylanguageId id) {
+        countryLanguageRepository.deleteById(id);
+    }
+
+    //Specifically required CRUD methods
+    public List<Country> getCountriesWithoutHeadOfState() {
+        List<Country> allCountries = countryRepository.findAll();
+        return allCountries.stream()
+                .filter(country -> country.getHeadOfState() == null || country.getHeadOfState().isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    private void nullCheck(Object input) {
+        if (input == null){
+            throw new IllegalArgumentException("input cannot be null");
+        }
+    }
+  
     public List<String> getAllSmallestDistricts() {
         return cityRepository.findAll().stream()
                 .collect(Collectors.groupingBy(
@@ -71,5 +153,4 @@ public class WorldService {
         return getAllSmallestDistricts().stream()
                 .limit(5).toList();
     }
-
 }
