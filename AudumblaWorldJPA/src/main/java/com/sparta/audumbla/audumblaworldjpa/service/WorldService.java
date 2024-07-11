@@ -82,5 +82,9 @@ public class WorldService {
                 .filter(country -> name.equalsIgnoreCase(country.getName()))
                 .collect(Collectors.toList());
     }
-    public List
+    public List<Country> getCountryByDistrict(String district) {
+        return countryRepository.findAll().stream()
+                .filter(country -> district.equalsIgnoreCase(country.getRegion()))
+                .collect(Collectors.toList());
+    }
 }
