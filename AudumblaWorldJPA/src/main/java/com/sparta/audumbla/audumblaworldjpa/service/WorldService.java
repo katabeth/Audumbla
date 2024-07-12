@@ -204,6 +204,51 @@ public class WorldService {
                 .toList();
 
     }
+    public Optional<Countrylanguage> getLanguageByCodeAndLanguage(String code, String language){
+        return countryLanguageRepository.findAll().stream()
+                .filter(countrylanguage -> code.equalsIgnoreCase(countrylanguage.getCountryCode().getCode()))
+                .filter(countrylanguage -> language.equalsIgnoreCase(countrylanguage.getId().getLanguage()))
+                .findFirst();
+    }
+    //Update methods
+    public void updateCityTable (int id, City updatedCity){
+        cityRepository.findById(id).ifPresent(city -> {
+            city.setName(updatedCity.getName());
+            city.setPopulation(updatedCity.getPopulation());
+            city.setDistrict(updatedCity.getDistrict());
+            city.setPopulation(updatedCity.getPopulation());
+            city.setCountryCode(updatedCity.getCountryCode());
+            cityRepository.save(city);
+        });
+    }
+    public void updateCountryTable (String countryCode, Country updatedCountry){
+        getCountryByCountryCode(countryCode).ifPresent(country -> {
+            country.setName(updatedCountry.getName());
+            country.setContinent(updatedCountry.getContinent());
+            country.setRegion(updatedCountry.getRegion());
+            country.setSurfaceArea(updatedCountry.getSurfaceArea());
+            country.setIndepYear(updatedCountry.getIndepYear());
+            country.setPopulation(updatedCountry.getPopulation());
+            country.setLifeExpectancy(updatedCountry.getLifeExpectancy());
+            country.setGnp(updatedCountry.getGnp());
+            country.setGNPOld(updatedCountry.getGNPOld());
+            country.setLocalName(updatedCountry.getLocalName());
+            country.setGovernmentForm(updatedCountry.getGovernmentForm());
+            country.setHeadOfState(updatedCountry.getHeadOfState());
+            country.setCapital(updatedCountry.getCapital());
+            country.setCode2(updatedCountry.getCode2());
+            countryRepository.save(country);
+        });
+    }
+    public void updateCountryLanguageTable (String language,String countryCode, Countrylanguage updatedCountryLanguage){
+        getLanguageByCodeAndLanguage(countryCode,language).ifPresent(countrylanguage -> {
+            countrylanguage.setPercentage(updatedCountryLanguage.getPercentage());
+            countrylanguage.setCountryCode(updatedCountryLanguage.getCountryCode());
+            countrylanguage.setIsOfficial(updatedCountryLanguage.getIsOfficial());
+            countrylanguage.setId(updatedCountryLanguage.getId());
+            countryLanguageRepository.save(countrylanguage);
+        });
+    }
     //Create methods
     public City createCity(City city) {
         nullCheck(city);
