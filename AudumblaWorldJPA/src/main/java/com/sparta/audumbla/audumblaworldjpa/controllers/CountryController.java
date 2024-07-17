@@ -58,7 +58,7 @@ public class CountryController {
                 methodOn(CountryController.class).getCountriesByCountryCode(country.get().getCode())).withSelfRel();
         Link relLink = WebMvcLinkBuilder.linkTo(
                 methodOn(CountryController.class).getCountries()).withRel("Countries");
-        return new ResponseEntity<>(EntityModel.of(country.get(), selfLink, relLink).add(citiesLinks), HttpStatus.OK);
+        return new ResponseEntity<>(EntityModel.of(country.get(), selfLink, relLink), HttpStatus.OK);
     }
     @PostMapping
     public ResponseEntity<EntityModel<Country>> createCountry(@RequestBody @Valid Country country, HttpServletRequest request) {
@@ -70,9 +70,9 @@ public class CountryController {
         URI location = URI.create(request.getRequestURL().toString()+"/"+country.getCode());
         return ResponseEntity.created(location).body(EntityModel.of(country));
     }
-    @PutMapping("/{countryCode}")
-    public ResponseEntity<EntityModel<Country>> updateCountry(@PathVariable String countryCode, @RequestBody @Valid Country country) {
-
-    }
+//    @PutMapping("/{countryCode}")
+//    public ResponseEntity<EntityModel<Country>> updateCountry(@PathVariable String countryCode, @RequestBody @Valid Country country) {
+//
+//    }
 
 }
