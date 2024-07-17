@@ -81,5 +81,11 @@ public class CountryController {
         worldService.updateCountryTable(country.getCode(),country);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
+    @DeleteMapping("/{countryCode}")
+    public ResponseEntity<Country> deleteCountry(@PathVariable String countryCode) {
+        // Find the country
+        // If not found, return not found
+        // How to manage conflicts with other tables
+        // Return No Content
+    }
 }
