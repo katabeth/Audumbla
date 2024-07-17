@@ -97,6 +97,14 @@ public class Country {
     )
     private List<Countrylanguage> languages;
 
+    public List<City> getCities() {
+        return cities;
+    }
+
+    public List<Countrylanguage> getLanguages() {
+        return languages;
+    }
+
     public String getCode() {
         return code;
     }
