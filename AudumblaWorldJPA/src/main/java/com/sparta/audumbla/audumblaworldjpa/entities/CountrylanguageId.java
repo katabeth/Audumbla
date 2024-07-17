@@ -55,4 +55,11 @@ public class CountrylanguageId implements Serializable {
         return Objects.hash(countryCode, language);
     }
 
+    @Override
+    public String toString() {
+        return "CountrylanguageId{" +
+                "countryCode='" + countryCode + '\'' +
+                ", language='" + language + '\'' +
+                '}';
+    }
 }

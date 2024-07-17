@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.math.BigDecimal;
 import java.util.*;
 import java.math.BigDecimal;
@@ -34,12 +35,16 @@ public class WorldService {
     }
     // READ and UPDATE for all Tables
     // READ all cities, countries, languages
+
+    @Transactional
     public List<City> getAllCities() {
         return cityRepository.findAll();
     }
+
     public List<Country> getAllCountries() {
         return countryRepository.findAll();
     }
+
     public List<Countrylanguage> getAllCountryLanguages() {
         return countryLanguageRepository.findAll();
     }
@@ -266,7 +271,7 @@ public class WorldService {
     }
 
     public void deleteCountryByCountryCode(String countryCode) {
-        countryRepository.deleteByCode(countryCode);
+        countryRepository.delete(getCountryByCountryCode(countryCode).orElseThrow());
     }
 
     public void deleteCountryLanguageById(CountrylanguageId id) {
