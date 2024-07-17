@@ -32,8 +32,18 @@ public class CityController {
 
         List<EntityModel<City>> cityModels = cities.stream()
                 .map(city -> EntityModel.of(city,
-                        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CityController.class).getCityById(city.getId())).withSelfRel(),
-                        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CityController.class).getAllCities()).withRel("cities")))
+                        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+                                .methodOn(CityController.class)
+                                .getCityById(city.getId()))
+                                .withSelfRel(),
+                        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+                                .methodOn(CityController.class)
+                                .getAllCities())
+                                .withRel("cities"),
+                        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+                                .methodOn(CountryController.class)
+                                .getCountriesByCountryCode(city.getCountryCode().getCode()))
+                                .withRel("country")))
                 .collect(Collectors.toList());
 
         return CollectionModel.of(cityModels,
@@ -45,7 +55,8 @@ public class CityController {
         Optional<City> city = worldService.getCitiesByID(id);
         return EntityModel.of(city,
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CityController.class).getCityById(id)).withSelfRel(),
-                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CityController.class).getAllCities()).withRel("cities"));
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CityController.class).getAllCities()).withRel("cities"),
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CountryController.class).getCountriesByCountryCode(city.orElseThrow().getCountryCode().getCode())).withRel("country"));
     }
 
     @PostMapping
