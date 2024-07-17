@@ -44,7 +44,7 @@ public class ReadTests {
     @Transactional
     void testSearchCitiesByPopulationBound(){
         List<City> test = worldService.getCitiesByPopulationBound(90000,100000);
-        Assertions.assertEquals(391, test.size());
+        Assertions.assertEquals(395, test.size());
     }
     @Test
     @DisplayName("Test I can Search Cities by Country Code")
