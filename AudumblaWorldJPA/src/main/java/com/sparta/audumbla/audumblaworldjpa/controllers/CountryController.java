@@ -70,9 +70,16 @@ public class CountryController {
         URI location = URI.create(request.getRequestURL().toString()+"/"+country.getCode());
         return ResponseEntity.created(location).body(EntityModel.of(country));
     }
-//    @PutMapping("/{countryCode}")
-//    public ResponseEntity<EntityModel<Country>> updateCountry(@PathVariable String countryCode, @RequestBody @Valid Country country) {
-//
-//    }
+    @PutMapping("/{countryCode}")
+    public ResponseEntity<Country> updateCountry(@PathVariable String countryCode, @RequestBody @Valid Country country) {
+
+        if(!countryCode.equalsIgnoreCase(country.getCode())){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else if (worldService.getCountryByCountryCode(countryCode).isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        worldService.updateCountryTable(country.getCode(),country);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 }
