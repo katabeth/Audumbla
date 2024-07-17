@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -81,6 +82,20 @@ public class Country {
     @ColumnDefault("''")
     @Column(name = "Code2", nullable = false, length = 2)
     private String code2;
+
+    @OneToMany(
+            mappedBy = "countryCode",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+    )
+    private List<City> cities;
+
+    @OneToMany(
+            mappedBy = "countryCode",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+    )
+    private List<Countrylanguage> languages;
 
     public String getCode() {
         return code;

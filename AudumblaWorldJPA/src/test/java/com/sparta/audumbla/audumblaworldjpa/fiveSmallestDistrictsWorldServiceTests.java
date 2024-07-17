@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.sparta.audumbla.audumblaworldjpa.testUtils.createCity;
+import static com.sparta.audumbla.audumblaworldjpa.TestUtils.createCity;
 
 
 @SpringBootTest

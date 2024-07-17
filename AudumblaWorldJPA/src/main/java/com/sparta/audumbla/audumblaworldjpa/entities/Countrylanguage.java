@@ -1,5 +1,6 @@
 package com.sparta.audumbla.audumblaworldjpa.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
@@ -16,6 +17,7 @@ public class Countrylanguage {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @ColumnDefault("''")
     @JoinColumn(name = "CountryCode", nullable = false)
+    @JsonBackReference
     private Country countryCode;
 
     @NotNull
@@ -67,7 +69,6 @@ public class Countrylanguage {
     public String toString() {
         return "Countrylanguage{" +
                 "id=" + id +
-                ", countryCode=" + countryCode +
                 ", isOfficial='" + isOfficial + '\'' +
                 ", percentage=" + percentage +
                 '}';
