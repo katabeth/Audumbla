@@ -20,16 +20,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/cities")
 public class CityController {
     //hateoas
-    public final WorldService worldService;
+    private final WorldService worldService;
 
     public CityController(WorldService worldService, CountryRepository countryRepository) {
         this.worldService = worldService;
     }
 
-//    @GetMapping
-//    public List<City> getAllCities() {
-//        return worldService.getAllCities();
-//    }
     @GetMapping
     public CollectionModel<EntityModel<City>> getAllCities() {
         List<City> cities = worldService.getAllCities();
@@ -50,5 +46,15 @@ public class CityController {
         return EntityModel.of(city,
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CityController.class).getCityById(id)).withSelfRel(),
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CityController.class).getAllCities()).withRel("cities"));
+    }
+
+    @PostMapping
+    public ResponseEntity<City> addCities(@RequestBody City city, HttpServletRequest request) {
+        if(city.getCountryCode().toString().isEmpty()) {
+            worldService.createCountry(city.getCountryCode());
+        }
+        worldService.createCity(city);
+        URI location = URI.create(request.getRequestURL().toString() + "/" + city.getName());
+        return ResponseEntity.created(location).body(city);
     }
 }
