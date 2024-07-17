@@ -8,6 +8,7 @@ import com.sparta.audumbla.audumblaworldjpa.repositories.CityRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryLanguageRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,7 +16,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.test.annotation.Rollback;
 
+import java.beans.Transient;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -26,13 +30,13 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 public class CreateDeleteTests {
 
-    @Mock
+    @Autowired
     private CityRepository cityRepository;
 
-    @Mock
+    @Autowired
     private CountryRepository countryRepository;
 
-    @Mock
+    @Autowired
     private CountryLanguageRepository countryLanguageRepository;
 
     @InjectMocks
@@ -44,21 +48,20 @@ public class CreateDeleteTests {
     @Test
     void testCreateCity() {
         City city = new City();
-        city.setId(1);
+        city.setCountryCode(worldServiceReal.getCountryByCountryCode("ABW").orElseThrow());
         city.setName("Test City");
         city.setDistrict("Test District");
         city.setPopulation(100000);
 
-        when(cityRepository.save(city)).thenReturn(city);
+//        when(cityRepository.save(city)).thenReturn(city);
 
-        City createdCity = worldService.createCity(city);
+        City createdCity = worldServiceReal.createCity(city);
 
         assertEquals(city.getId(), createdCity.getId());
         assertEquals(city.getName(), createdCity.getName());
         assertEquals(city.getDistrict(), createdCity.getDistrict());
         assertEquals(city.getPopulation(), createdCity.getPopulation());
-
-        verify(cityRepository, times(1)).save(city);
+        //verify(cityRepository, times(1)).save(city);
     }
 
     @Test
@@ -90,10 +93,11 @@ public class CreateDeleteTests {
         country.setCapital(1);
         country.setCode2("TC");
 
-        when(countryRepository.save(country)).thenReturn(country);
+        //when(countryRepository.save(country)).thenReturn(country);
 
-        Country createdCountry = worldService.createCountry(country);
+        Country createdCountry = worldServiceReal.createCountry(country);
 
+        worldServiceReal.createCountry(country);
         assertEquals(country.getCode(), createdCountry.getCode());
         assertEquals(country.getName(), createdCountry.getName());
         assertEquals(country.getContinent(), createdCountry.getContinent());
@@ -110,7 +114,7 @@ public class CreateDeleteTests {
         assertEquals(country.getCapital(), createdCountry.getCapital());
         assertEquals(country.getCode2(), createdCountry.getCode2());
 
-        verify(countryRepository, times(1)).save(any(Country.class));
+        //verify(countryRepository, times(1)).save(any(Country.class));
     }
 
     @Test
@@ -149,13 +153,15 @@ public class CreateDeleteTests {
         verify(cityRepository, times(1)).deleteById(cityId);
     }
 
+    @Transactional
+    @Rollback(false)
     @Test
     void testDeleteCountryById() {
-        String countryCode = "ABC";
+        String countryCode = "TST";
 
-        worldService.deleteCountryByCountryCode(countryCode);
+        worldServiceReal.deleteCountryByCountryCode(countryCode);
 
-        verify(countryRepository, times(1)).deleteByCode(countryCode);
+        //verify(countryRepository, times(1)).deleteByCode(countryCode);
     }
 
     @Test

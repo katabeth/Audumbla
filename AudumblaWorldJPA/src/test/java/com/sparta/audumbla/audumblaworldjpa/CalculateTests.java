@@ -37,6 +37,8 @@ public class CalculateTests {
     @Test
     void testGetCountriesWithoutHeadOfState() {
         List<Country> result = worldService.getCountriesWithoutHeadOfState();
+        System.out.println("Countries without the head of state:");
+        result.forEach(country -> System.out.println(country.nameToString()));
         assertEquals(3, result.size());
     }
 
