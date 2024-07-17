@@ -256,7 +256,6 @@ public class WorldService {
         return cityRepository.save(city);
     }
 
-    @Modifying
     public Country createCountry(Country country) {
         nullCheck(country);
         return countryRepository.save(country);
