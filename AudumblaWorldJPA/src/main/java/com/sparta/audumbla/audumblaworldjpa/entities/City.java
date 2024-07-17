@@ -1,5 +1,6 @@
 package com.sparta.audumbla.audumblaworldjpa.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -34,6 +35,7 @@ public class City {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @ColumnDefault("''")
     @JoinColumn(name = "CountryCode", nullable = false)
+    @JsonBackReference
     private Country countryCode;
 
     public Country getCountryCode() {

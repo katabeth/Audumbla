@@ -356,7 +356,7 @@ public class WorldService {
     }
 
     @Transactional
-    public Object getCountriesMainLanguageSpeakers(String countryCode) {
+    public int getCountriesMainLanguageSpeakers(String countryCode) {
         Country country = getCountryByCountryCode(countryCode).orElseThrow();
         BigDecimal population = BigDecimal.valueOf(country.getPopulation());
         var test = getLanguagesByCountry(country).stream()
