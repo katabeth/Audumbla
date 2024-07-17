@@ -1,17 +1,11 @@
-# Audumbla
+# Audumbla : Cow-Cow Week
 
-Requirements (part 1: JPA)
-  You have been asked to create a Spring program to interact with the MySQL World Database
-  This Database is made up of 3 tables which represent:
-    country: Information about countries of the world.
-    city: Information about some of the cities in those countries.
-    countrylanguage: Languages spoken in each country.
-  You will need to use Spring JPA to connect and communicate with the Database
-  Along with basic CRUD operations, you will need to find out the following:
-    Which countries have no Head of State?
-    What percentage of a given countries population lives in its largest city
-    Which country has the most cities? How many cites does it have?
-    Which 5 districts have the smallest population?
-    For a given country, approximately how many people speak its most popular official language?
-  Think carefully about the use of a service layer in your application
-  You will need to use WebMVCTests to ensure your repositories work correctly 
+Requirements (part 2: Spring REST API
+Following on from the last project, you have been asked to creat a RESTful API that exposes data from the MySQL World Database
+The API should allow someone to perform CRUD operation on the 3 tables
+You should use good error handling to report on misuse of the API with good messaging and correct status codes
+Think carefully about the design of your API and how you will use path variables, request bodies ond request parameters
+In addition, you will need to research how to do the following:
+Secure the endpoints using an API key. Someone without the key with only be able to read data (Not using Spring Security)
+Use Swagger UI to provide a graphical interface to your API
+The API should be tested using MockMVC for integration testing and WebMVCTests for unit testing
