@@ -44,11 +44,11 @@ public class CountryController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-//        List<Link> citiesLinks = country.get().getCities().stream()
-//                .map(city -> WebMvcLinkBuilder.linkTo(
-//                                methodOn(CityController.class).getCitiesById(city.getId()).orElseThrow().get)
-//                        .withRel(city.getName()))
-//                .toList();
+        List<Link> citiesLinks = country.get().getCities().stream()
+                .map(city -> WebMvcLinkBuilder.linkTo(
+                                methodOn(CityController.class).getCityById(city.getId()))
+                        .withRel(city.getName()))
+                .toList();
 //        List<Link> languagesLinks = country.get().getLanguages().stream()
 //                .map(language -> WebMvcLinkBuilder.linkTo(
 //                        methodOn(LanguageController.class).getCountryLanguageByKey(countryCode,language.getId().getLanguage()))
@@ -58,7 +58,7 @@ public class CountryController {
                 methodOn(CountryController.class).getCountriesByCountryCode(country.get().getCode())).withSelfRel();
         Link relLink = WebMvcLinkBuilder.linkTo(
                 methodOn(CountryController.class).getCountries()).withRel("Countries");
-        return new ResponseEntity<>(EntityModel.of(country.get(), selfLink, relLink), HttpStatus.OK);
+        return new ResponseEntity<>(EntityModel.of(country.get(), selfLink, relLink).add(citiesLinks), HttpStatus.OK);
     }
     @PostMapping
     public ResponseEntity<EntityModel<Country>> createCountry(@RequestBody @Valid Country country, HttpServletRequest request) {
