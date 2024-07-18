@@ -44,7 +44,7 @@ public class CityController {
                                 .withRel("cities"),
                         WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
                                 .methodOn(CountryController.class)
-                                .getCountriesByCountryCode(city.getCountryCode().getCode()))
+                                .getCountryByCountryCode(city.getCountryCode().getCode()))
                                 .withRel("country")))
                 .collect(Collectors.toList());
 
@@ -66,7 +66,7 @@ public class CityController {
                         .withRel("cities"),
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
                         .methodOn(CountryController.class)
-                        .getCountriesByCountryCode(city.orElseThrow().getCountryCode().getCode()))
+                        .getCountryByCountryCode(city.orElseThrow().getCountryCode().getCode()))
                         .withRel("country"));
     }
 
@@ -85,7 +85,7 @@ public class CityController {
                         .getAllCities()).withRel("cities"),
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
                         .methodOn(CountryController.class)
-                        .getCountriesByCountryCode(city.getCountryCode().getCode()))
+                        .getCountryByCountryCode(city.getCountryCode().getCode()))
                         .withRel("country"));
     }
 
@@ -105,7 +105,7 @@ public class CityController {
                         .getAllCities()).withRel("cities"),
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
                         .methodOn(CountryController.class)
-                        .getCountriesByCountryCode(city.getCountryCode().getCode()))
+                        .getCountryByCountryCode(city.getCountryCode().getCode()))
                         .withRel("country"));
     }
 

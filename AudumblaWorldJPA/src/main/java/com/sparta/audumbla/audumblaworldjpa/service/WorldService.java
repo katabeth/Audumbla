@@ -205,7 +205,7 @@ public class WorldService {
     }
     public Optional<Countrylanguage> getLanguageByCodeAndLanguage(String code, String language){
         return countryLanguageRepository.findAll().stream()
-                .filter(countrylanguage -> code.equalsIgnoreCase(countrylanguage.getId().getCountryCode()))
+                .filter(countrylanguage -> code.equalsIgnoreCase(countrylanguage.getCountryCode().getCode()))
                 .filter(countrylanguage -> language.equalsIgnoreCase(countrylanguage.getId().getLanguage()))
                 .findFirst();
     }
@@ -220,7 +220,6 @@ public class WorldService {
             cityRepository.save(city);
         });
     }
-
     public void updateCountryTable (String countryCode, Country updatedCountry){
         getCountryByCountryCode(countryCode).ifPresent(country -> {
             country.setName(updatedCountry.getName());
@@ -240,9 +239,8 @@ public class WorldService {
             countryRepository.save(country);
         });
     }
-
-    public void updateCountryLanguageTable (String language,String countryCode, Countrylanguage updatedCountryLanguage){
-        getLanguageByCodeAndLanguage(countryCode,language).ifPresent(countrylanguage -> {
+    public void updateCountryLanguageTable (Countrylanguage updatedCountryLanguage){
+        getLanguageByCodeAndLanguage(updatedCountryLanguage.getId().getCountryCode(),updatedCountryLanguage.getId().getLanguage()).ifPresent(countrylanguage -> {
             countrylanguage.setPercentage(updatedCountryLanguage.getPercentage());
             countrylanguage.setCountryCode(updatedCountryLanguage.getCountryCode());
             countrylanguage.setIsOfficial(updatedCountryLanguage.getIsOfficial());
@@ -250,7 +248,6 @@ public class WorldService {
             countryLanguageRepository.save(countrylanguage);
         });
     }
-
     //Create methods
     public City createCity(City city) {
         nullCheck(city);
@@ -279,7 +276,9 @@ public class WorldService {
     public void deleteCountryLanguageById(CountrylanguageId id) {
         countryLanguageRepository.deleteById(id);
     }
-
+    public void deleteCountryLanguageByCountryCode(String countryCode){
+        countryLanguageRepository.deleteAll(getCountryLanguageByCountryCode(countryCode));
+    }
     //Specifically required CRUD methods
     public List<Country> getCountriesWithoutHeadOfState() {
         List<Country> allCountries = countryRepository.findAll();
