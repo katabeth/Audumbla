@@ -5,7 +5,6 @@ import com.sparta.audumbla.audumblaworldjpa.repositories.CityRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryLanguageRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -171,17 +170,17 @@ public class WorldService {
     }
     // Languages
     // CountryCode, Language, IsOfficial,Percentage
-    public List<Countrylanguage> getCountryLanguageByCountryCode(String countryCode){
+    public List<Countrylanguage> getCountryLanguagesByCountryCode(String countryCode){
         return countryLanguageRepository.findAll().stream()
                 .filter(language-> countryCode.equalsIgnoreCase(language.getCountryCode().getCode()))
                 .toList();
     }
-    public List<Countrylanguage> getCountryLanguageByLanguage(String language){
+    public List<Countrylanguage> getCountryLanguagesByLanguage(String language){
         return countryLanguageRepository.findAll().stream()
                 .filter(countrylanguage -> countrylanguage.getId().getLanguage().contains(language))
                 .toList();
     }
-    public List<Countrylanguage> getCountryLanguageByIsOfficial(boolean isOfficial){
+    public List<Countrylanguage> getCountryLanguagesByIsOfficial(boolean isOfficial){
         String condition = "";
         if (isOfficial) {
             condition = "T";
@@ -193,7 +192,7 @@ public class WorldService {
                 .filter(countrylanguage -> countrylanguage.getIsOfficial().equalsIgnoreCase(finalCondition))
                 .toList();
     }
-    public List<Countrylanguage> getCountryLanguageByPercentage
+    public List<Countrylanguage> getCountryLanguagesByPercentage
             (double percentageLowerBoundary, double percentageUpperBoundary){
         return countryLanguageRepository.findAll().stream()
                 .filter(countrylanguage -> countrylanguage.getPercentage()
@@ -276,8 +275,8 @@ public class WorldService {
     public void deleteCountryLanguageById(CountrylanguageId id) {
         countryLanguageRepository.deleteById(id);
     }
-    public void deleteCountryLanguageByCountryCode(String countryCode){
-        countryLanguageRepository.deleteAll(getCountryLanguageByCountryCode(countryCode));
+    public void deleteCountryLanguagesByCountryCode(String countryCode){
+        countryLanguageRepository.deleteAll(getCountryLanguagesByCountryCode(countryCode));
     }
     //Specifically required CRUD methods
     public List<Country> getCountriesWithoutHeadOfState() {

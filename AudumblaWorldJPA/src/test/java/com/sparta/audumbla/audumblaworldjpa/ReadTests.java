@@ -151,25 +151,25 @@ public class ReadTests {
     @Test
     @DisplayName("Test getCountryLanguageByCountryCode")
     void getCountryLanguageByCountryCode() {
-        List<Countrylanguage> test = worldService.getCountryLanguageByCountryCode("USA");
+        List<Countrylanguage> test = worldService.getCountryLanguagesByCountryCode("USA");
         Assertions.assertEquals(12, test.size());
     }
     @Test
     @DisplayName("Test getCountryLanguageByLanguage")
     void testGetCountryLanguageByLanguage(){
-        List<Countrylanguage> test = worldService.getCountryLanguageByLanguage("English");
+        List<Countrylanguage> test = worldService.getCountryLanguagesByLanguage("English");
         Assertions.assertEquals(77, test.size());
     }
     @Test
     @DisplayName("Test getCountryLanguageByIsOfficial")
     void testGetCountryLanguageByIsOfficial(){
-        List<Countrylanguage> test = worldService.getCountryLanguageByIsOfficial(true);
+        List<Countrylanguage> test = worldService.getCountryLanguagesByIsOfficial(true);
         Assertions.assertEquals(238, test.size());
     }
     @Test
     @DisplayName("Test getCountryLanguageByPercentage")
     void testGetCountryLanguageByPercentage(){
-        List<Countrylanguage> test = worldService.getCountryLanguageByPercentage
+        List<Countrylanguage> test = worldService.getCountryLanguagesByPercentage
                 (3,40);
         Assertions.assertEquals(404, test.size());
     }
