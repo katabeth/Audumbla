@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +30,19 @@ public class CityController {
     public CollectionModel<EntityModel<City>> getAllCities() {
         List<City> cities = worldService.getAllCities();
 
+        return CollectionModel.of(getEntityModelsOfCities(cities),
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CityController.class).getAllCities()).withSelfRel());
+    }
+
+    @GetMapping("/country={countryCode}")
+    public CollectionModel<EntityModel<City>> getAllCitiesFromCountry(@PathVariable String countryCode) {
+        List<City> cities = worldService.getCitiesByCountryCode(countryCode);
+
+        return CollectionModel.of(getEntityModelsOfCities(cities),
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CityController.class).getAllCities()).withSelfRel());
+    }
+
+    private static List<EntityModel<City>> getEntityModelsOfCities(List<City> cities) {
         List<EntityModel<City>> cityModels = cities.stream()
                 .map(city -> EntityModel.of(city,
                         WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
@@ -47,8 +59,7 @@ public class CityController {
                                 .withRel("country")))
                 .collect(Collectors.toList());
 
-        return CollectionModel.of(cityModels,
-                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CityController.class).getAllCities()).withSelfRel());
+        return cityModels;
     }
 
     @GetMapping("/{id}")
