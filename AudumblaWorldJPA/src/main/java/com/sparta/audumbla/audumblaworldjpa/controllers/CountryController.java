@@ -38,9 +38,6 @@ public class CountryController {
     @GetMapping
     public CollectionModel<EntityModel<Country>> getAllCountries() {
         List<Country> countries = worldService.getAllCountries();
-        // Link to the country
-        // Link to the cities of said country
-        // Link to the languages of said country
         List<EntityModel<Country>> countryModels = countries.stream()
                 .map(country -> EntityModel.of(country,
                         WebMvcLinkBuilder.linkTo(
