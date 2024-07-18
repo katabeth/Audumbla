@@ -30,13 +30,13 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 public class CreateDeleteTests {
 
-    @Autowired
+    @Mock
     private CityRepository cityRepository;
 
-    @Autowired
+    @Mock
     private CountryRepository countryRepository;
 
-    @Autowired
+    @Mock
     private CountryLanguageRepository countryLanguageRepository;
 
     @InjectMocks
