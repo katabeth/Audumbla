@@ -45,7 +45,7 @@ public class LanguageController {
     public CollectionModel<EntityModel<Countrylanguage>> getLanguagesByCountry(@PathVariable String countryCode) {
         List<Countrylanguage> languages = worldService.getCountryLanguagesByCountryCode(countryCode);
         if(languages.isEmpty()){
-            throw new ResourceNotFoundException("No languages of country"+countryCode+"Exist");
+            throw new ResourceNotFoundException("No languages of country "+countryCode+" Exist");
         }
         return ControllerUtils.languagesMapping(languages)
                 .add(WebMvcLinkBuilder.linkTo(methodOn(LanguageController.class).getLanguagesByCountry(countryCode)).withSelfRel());
@@ -55,7 +55,7 @@ public class LanguageController {
     public ResponseEntity<EntityModel<Countrylanguage>> getLanguageByKey(@PathVariable String countryCode, @PathVariable String language) {
         Optional<Countrylanguage> countryLanguage = worldService.getLanguageByCodeAndLanguage(countryCode,language);
         if(countryLanguage.isEmpty()){
-            throw new ResourceNotFoundException("No languages of key"+countryCode+","+language+"Exist");
+            throw new ResourceNotFoundException("No languages of key "+countryCode+","+language+" Exist");
         }
         return countryLanguage
                 .map(ControllerUtils::languageMapping)
@@ -68,7 +68,7 @@ public class LanguageController {
         language.setCountryCode(worldService.getCountryByCountryCode(language.getId().getCountryCode())
                 .orElseThrow(() -> new ResourceNotFoundException("No country of countryCode"+language.getId().getCountryCode()+"exists")));
         if(worldService.getLanguageByCodeAndLanguage(language.getId().getCountryCode(),language.getId().getLanguage()).isPresent()){
-            throw new AlreadyExistsException("Country with key of"+language.getId().toString()+"already exists");
+            throw new AlreadyExistsException("Country with key of "+language.getId().toString()+" already exists");
         }
         worldService.createCountryLanguage(language);
         URI location = URI.create(request.getRequestURL().toString()+"/"+language.getId().getCountryCode()+"/"+language.getId().getLanguage());
@@ -79,7 +79,7 @@ public class LanguageController {
     public ResponseEntity<Void> deleteLanguage(@PathVariable String countryCode,@PathVariable String language){
         Optional<Countrylanguage> foundLanguage = worldService.getLanguageByCodeAndLanguage(countryCode,language);
         if(foundLanguage.isEmpty()){
-            throw new ResourceNotFoundException("No languages of key"+countryCode+","+language+"exist to delete");
+            throw new ResourceNotFoundException("No languages of key "+countryCode+","+language+" exist to delete");
         } else{
             CountrylanguageId deleteKey = new CountrylanguageId();
             deleteKey.setLanguage(language);
