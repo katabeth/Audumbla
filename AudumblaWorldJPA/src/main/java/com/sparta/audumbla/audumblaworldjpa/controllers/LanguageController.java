@@ -1,14 +1,14 @@
 package com.sparta.audumbla.audumblaworldjpa.controllers;
 
-import com.sparta.audumbla.audumblaworldjpa.entities.City;
 import com.sparta.audumbla.audumblaworldjpa.entities.Countrylanguage;
 import com.sparta.audumbla.audumblaworldjpa.entities.CountrylanguageId;
-import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
+import com.sparta.audumbla.audumblaworldjpa.exceptions.AlreadyExistsException;
+import com.sparta.audumbla.audumblaworldjpa.exceptions.DataMismatchException;
+import com.sparta.audumbla.audumblaworldjpa.exceptions.ResourceNotFoundException;
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.metrics.MetricsProperties;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -45,42 +45,59 @@ public class LanguageController {
         }
     }
 
-    @GetMapping
-    public CollectionModel<EntityModel<Countrylanguage>> getAllLanguages() {
-        List<EntityModel<Countrylanguage>> languages = worldService.getAllCountryLanguages()
+    private CollectionModel<EntityModel<Countrylanguage>> languagesMapping(List<Countrylanguage> worldService) {
+        List<EntityModel<Countrylanguage>> languages = worldService
                 .stream()
                 .map(this::languageMapping)
                 .collect(Collectors.toList());
-        return CollectionModel.of(languages,
-                WebMvcLinkBuilder.linkTo(methodOn(LanguageController.class).getAllLanguages()).withSelfRel());
+        return CollectionModel.of(languages);
     }
 
-    //todo : add better error handling
+    @GetMapping
+    public CollectionModel<EntityModel<Countrylanguage>> getAllLanguages() {
+        return languagesMapping(worldService.getAllCountryLanguages())
+                .add(WebMvcLinkBuilder.linkTo(methodOn(LanguageController.class).getAllLanguages()).withSelfRel());
+    }
+
+    @GetMapping("/{countryCode}")
+    public CollectionModel<EntityModel<Countrylanguage>> getLanguagesByCountry(@PathVariable String countryCode) {
+        List<Countrylanguage> languages = worldService.getCountryLanguagesByCountryCode(countryCode);
+        if(languages.isEmpty()){
+            throw new ResourceNotFoundException("No languages of country"+countryCode+"Exist");
+        }
+        return languagesMapping(languages)
+                .add(WebMvcLinkBuilder.linkTo(methodOn(LanguageController.class).getLanguagesByCountry(countryCode)).withSelfRel());
+    }
+
     @GetMapping("/{countryCode}/{language}")
     public ResponseEntity<EntityModel<Countrylanguage>> getLanguageByKey(@PathVariable String countryCode, @PathVariable String language) {
         Optional<Countrylanguage> countryLanguage = worldService.getLanguageByCodeAndLanguage(countryCode,language);
+        if(countryLanguage.isEmpty()){
+            throw new ResourceNotFoundException("No languages of key"+countryCode+","+language+"Exist");
+        }
         return countryLanguage
                 .map(this::languageMapping)
                 .map(l -> new ResponseEntity<>(l,HttpStatus.OK))
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    //todo : add hateoas
-    //todo: add check to make sure the country language doesn't already exist
     @PostMapping
-    public ResponseEntity<Countrylanguage> addLanguage(@RequestBody @Valid Countrylanguage language, HttpServletRequest request){
-        language.setCountryCode(worldService.getCountryByCountryCode(language.getId().getCountryCode()).orElseThrow());
+    public ResponseEntity<EntityModel<Countrylanguage>> addLanguage(@RequestBody @Valid Countrylanguage language, HttpServletRequest request){
+        language.setCountryCode(worldService.getCountryByCountryCode(language.getId().getCountryCode())
+                .orElseThrow(() -> new ResourceNotFoundException("No country of countryCode"+language.getId().getCountryCode()+"exists")));
+        if(worldService.getLanguageByCodeAndLanguage(language.getId().getCountryCode(),language.getId().getLanguage()).isPresent()){
+            throw new AlreadyExistsException("Country with key of"+language.getId().toString()+"already exists");
+        }
         worldService.createCountryLanguage(language);
         URI location = URI.create(request.getRequestURL().toString()+"/"+language.getId().getCountryCode()+"/"+language.getId().getLanguage());
-        return ResponseEntity.created(location).body(language);
+        return ResponseEntity.created(location).body(languageMapping(language));
     }
 
-    //todo : add better error handling
     @DeleteMapping("/{countryCode}/{language}")
     public ResponseEntity<Void> deleteLanguage(@PathVariable String countryCode,@PathVariable String language){
         Optional<Countrylanguage> foundLanguage = worldService.getLanguageByCodeAndLanguage(countryCode,language);
         if(foundLanguage.isEmpty()){
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("No languages of key"+countryCode+","+language+"exist to delete");
         } else{
             CountrylanguageId deleteKey = new CountrylanguageId();
             deleteKey.setLanguage(language);
@@ -90,20 +107,19 @@ public class LanguageController {
         }
     }
 
-    //todo : add hateoas
     @PutMapping("/{countryCode}/{language}")
-    public ResponseEntity<Countrylanguage> updateLanguage(@PathVariable String countryCode,@PathVariable String language, @RequestBody Countrylanguage countrylanguage){
+    public ResponseEntity<EntityModel<Countrylanguage>> updateLanguage(@PathVariable String countryCode,@PathVariable String language, @RequestBody Countrylanguage countrylanguage){
         if(!countryCode.equals(countrylanguage.getId().getCountryCode()) || !language.equals(countrylanguage.getId().getLanguage())){
-            return ResponseEntity.badRequest().body(null);
+            throw new DataMismatchException("The country codes and languages of your id and body do not match");
         }
         Optional<Countrylanguage> foundLanguage = worldService.getLanguageByCodeAndLanguage(countryCode,language);
         if(foundLanguage.isEmpty()){
             worldService.createCountryLanguage(countrylanguage);
-            return ResponseEntity.ok(countrylanguage);
+            return ResponseEntity.ok(languageMapping(countrylanguage));
         }
         worldService.updateCountryLanguageTable(countrylanguage);
 
-        return ResponseEntity.ok(countrylanguage);
+        return ResponseEntity.ok(languageMapping(countrylanguage));
     }
 
 }
