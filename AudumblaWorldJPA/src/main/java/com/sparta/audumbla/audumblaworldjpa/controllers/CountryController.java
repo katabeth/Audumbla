@@ -10,6 +10,7 @@ import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -35,8 +36,29 @@ public class CountryController {
     }
 
     @GetMapping
-    public List<Country> getCountries() {
-        return worldService.getAllCountries();
+    public CollectionModel<EntityModel<Country>> getAllCountries() {
+        List<Country> countries = worldService.getAllCountries();
+        // Link to the country
+        // Link to the cities of said country
+        // Link to the languages of said country
+        List<EntityModel<Country>> countryModels = countries.stream()
+                .map(country -> EntityModel.of(country,
+                        WebMvcLinkBuilder.linkTo(
+                                methodOn(CountryController.class).getCountryByCountryCode(country.getCode()))
+                                .withSelfRel(),
+//                        WebMvcLinkBuilder.linkTo(
+//                                methodOn(CityController.class).getCitiesByCountry(country.getCode()))
+//                                .withRel("cities"),
+                        WebMvcLinkBuilder.linkTo(methodOn(LanguageController.class)
+                                        .getLanguagesByCountry(country.getCode()))
+                                .withRel("languages")
+
+
+                ))
+                .toList();
+
+        return CollectionModel.of(countryModels,
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CountryController.class).getAllCountries()).withSelfRel());
     }
 
     @GetMapping("/{countryCode}")
@@ -60,7 +82,7 @@ public class CountryController {
         Link selfLink = WebMvcLinkBuilder.linkTo(
                 methodOn(CountryController.class).getCountryByCountryCode(country.get().getCode())).withSelfRel();
         Link relLink = WebMvcLinkBuilder.linkTo(
-                methodOn(CountryController.class).getCountries()).withRel("Countries");
+                methodOn(CountryController.class).getAllCountries()).withRel("Countries");
         return new ResponseEntity<>(EntityModel.of(country.get(), selfLink, relLink).add(citiesLinks).add(languagesLinks), HttpStatus.OK);
     }
 
