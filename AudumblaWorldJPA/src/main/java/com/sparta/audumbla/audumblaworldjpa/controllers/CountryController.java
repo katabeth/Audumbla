@@ -39,7 +39,7 @@ public class CountryController {
         return countryRepository.findAll();
     }
     @GetMapping("/{countryCode}")
-    public ResponseEntity<EntityModel<Country>> getCountriesByCountryCode(@PathVariable String countryCode) {
+    public ResponseEntity<EntityModel<Country>> getCountryByCountryCode(@PathVariable String countryCode) {
 
         Optional<Country> country = worldService.getCountryByCountryCode(countryCode);
         if (country.isEmpty()){
@@ -51,16 +51,16 @@ public class CountryController {
                                 methodOn(CityController.class).getCityById(city.getId()))
                         .withRel(city.getName()))
                 .toList();
-//        List<Link> languagesLinks = country.get().getLanguages().stream()
-//                .map(language -> WebMvcLinkBuilder.linkTo(
-//                        methodOn(LanguageController.class).getCountryLanguageByKey(countryCode,language.getId().getLanguage()))
-//                        .withRel(language.getId().getLanguage()))
-//                .toList();
+        List<Link> languagesLinks = country.get().getLanguages().stream()
+                .map(language -> WebMvcLinkBuilder.linkTo(
+                        methodOn(LanguageController.class).getLanguageByKey(countryCode,language.getId().getLanguage()))
+                        .withRel(language.getId().getLanguage()))
+                .toList();
         Link selfLink = WebMvcLinkBuilder.linkTo(
-                methodOn(CountryController.class).getCountriesByCountryCode(country.get().getCode())).withSelfRel();
+                methodOn(CountryController.class).getCountryByCountryCode(country.get().getCode())).withSelfRel();
         Link relLink = WebMvcLinkBuilder.linkTo(
                 methodOn(CountryController.class).getCountries()).withRel("Countries");
-        return new ResponseEntity<>(EntityModel.of(country.get(), selfLink, relLink).add(citiesLinks), HttpStatus.OK);
+        return new ResponseEntity<>(EntityModel.of(country.get(), selfLink, relLink).add(citiesLinks).add(languagesLinks), HttpStatus.OK);
     }
     @PostMapping
     public ResponseEntity<EntityModel<Country>> createCountry(@RequestBody @Valid Country country, HttpServletRequest request) {
