@@ -17,7 +17,7 @@ public class CowInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String apiKey = request.getParameter("apiKey");
+        String apiKey = request.getHeader("COW-API-KEY");
         if (apiKey == null) {
             if(request.getMethod().equals("GET")){
                 return true; // Allow GET requests
