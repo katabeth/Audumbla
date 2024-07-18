@@ -91,7 +91,7 @@ public class CountryController {
         } else if (!worldService.getCitiesByCountryCode(countryCode).isEmpty()){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         } else if (!worldService.getCountryLanguageByCountryCode(countryCode).isEmpty()){
-            countryLanguageRepository.deleteAll(worldService.getCountryLanguageByCountryCode(countryCode));
+            worldService.deleteCountryLanguageByCountryCode(countryCode);
         }
         worldService.deleteCountryByCountryCode(countryCode);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -278,7 +278,9 @@ public class WorldService {
     public void deleteCountryLanguageById(CountrylanguageId id) {
         countryLanguageRepository.deleteById(id);
     }
-
+    public void deleteCountryLanguageByCountryCode(String countryCode){
+        countryLanguageRepository.deleteAll(getCountryLanguageByCountryCode(countryCode));
+    }
     //Specifically required CRUD methods
     public List<Country> getCountriesWithoutHeadOfState() {
         List<Country> allCountries = countryRepository.findAll();
