@@ -1,7 +1,6 @@
 package com.sparta.audumbla.audumblaworldjpa.config;
 
 import com.sparta.audumbla.audumblaworldjpa.entities.ApiKey;
-import com.sparta.audumbla.audumblaworldjpa.repositories.ApiKeyRepository;
 import com.sparta.audumbla.audumblaworldjpa.service.APIService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +25,7 @@ public class CowInterceptor implements HandlerInterceptor {
                 return false;
             }
         }
-        ApiKey key = apiService.getApiKeyByApiKey(apiKey);
+        ApiKey key = apiService.getApiKeyEntityByApiKey(apiKey);
         if (key == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }

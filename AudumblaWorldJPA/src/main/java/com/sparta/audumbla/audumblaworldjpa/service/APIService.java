@@ -16,7 +16,7 @@ public class APIService {
         this.apiKeyRepository = apiKeyRepository;
     }
 
-    public ApiKey getApiKeyByApiKey(String APIKey) {
+    public ApiKey getApiKeyEntityByApiKey(String APIKey) {
         return apiKeyRepository.findAll().stream()
                 .filter(key -> key.getApiKey().equals(APIKey))
                 .findFirst().orElse(null);
