@@ -101,7 +101,7 @@ public class LanguageController {
             worldService.createCountryLanguage(countrylanguage);
             return ResponseEntity.ok(countrylanguage);
         }
-        worldService.updateCountryLanguageTable(language,countryCode,countrylanguage);
+        worldService.updateCountryLanguageTable(countrylanguage);
 
         return ResponseEntity.ok(countrylanguage);
     }
