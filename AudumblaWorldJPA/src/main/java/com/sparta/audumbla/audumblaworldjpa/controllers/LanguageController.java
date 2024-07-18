@@ -2,6 +2,7 @@ package com.sparta.audumbla.audumblaworldjpa.controllers;
 
 import com.sparta.audumbla.audumblaworldjpa.entities.City;
 import com.sparta.audumbla.audumblaworldjpa.entities.Countrylanguage;
+import com.sparta.audumbla.audumblaworldjpa.entities.CountrylanguageId;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,8 +39,7 @@ public class LanguageController {
     private EntityModel<Countrylanguage> languageMapping(Countrylanguage language){
         {
             Link selfLink = WebMvcLinkBuilder.linkTo(methodOn(LanguageController.class).getLanguageByKey(language.getId().getCountryCode(),language.getId().getLanguage())).withSelfRel();
-            //todo : add support for countryController code once it can be done
-            Link relLink =  WebMvcLinkBuilder.linkTo(methodOn(LanguageController.class).getAllLanguages()).withSelfRel();//WebMvcLinkBuilder.linkTo(methodOn(CountryController.class).getCountry(language.getCountryCode())).withSelfRel().withRel(language.getCountryCode().getName());
+            Link relLink =  WebMvcLinkBuilder.linkTo(methodOn(CountryController.class).getCountryByCountryCode(language.getCountryCode().getCode())).withRel("country");
 
             return EntityModel.of(language, selfLink, relLink);
         }
@@ -55,21 +55,55 @@ public class LanguageController {
                 WebMvcLinkBuilder.linkTo(methodOn(LanguageController.class).getAllLanguages()).withSelfRel());
     }
 
+    //todo : add better error handling
     @GetMapping("/{countryCode}/{language}")
     public ResponseEntity<EntityModel<Countrylanguage>> getLanguageByKey(@PathVariable String countryCode, @PathVariable String language) {
         Optional<Countrylanguage> countryLanguage = worldService.getLanguageByCodeAndLanguage(countryCode,language);
         return countryLanguage
                 .map(this::languageMapping)
                 .map(l -> new ResponseEntity<>(l,HttpStatus.OK))
-                .orElse(ResponseEntity.badRequest().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
+    //todo : add hateoas
+    //todo: add check to make sure the country language doesn't already exist
     @PostMapping
     public ResponseEntity<Countrylanguage> addLanguage(@RequestBody @Valid Countrylanguage language, HttpServletRequest request){
-        System.out.println(language);
+        language.setCountryCode(worldService.getCountryByCountryCode(language.getId().getCountryCode()).orElseThrow());
         worldService.createCountryLanguage(language);
-        URI location = URI.create(request.getRequestURL().toString()+"/"+language.getCountryCode()+"/"+language.getId());
+        URI location = URI.create(request.getRequestURL().toString()+"/"+language.getId().getCountryCode()+"/"+language.getId().getLanguage());
         return ResponseEntity.created(location).body(language);
+    }
+
+    //todo : add better error handling
+    @DeleteMapping("/{countryCode}/{language}")
+    public ResponseEntity<Void> deleteLanguage(@PathVariable String countryCode,@PathVariable String language){
+        Optional<Countrylanguage> foundLanguage = worldService.getLanguageByCodeAndLanguage(countryCode,language);
+        if(foundLanguage.isEmpty()){
+            return ResponseEntity.notFound().build();
+        } else{
+            CountrylanguageId deleteKey = new CountrylanguageId();
+            deleteKey.setLanguage(language);
+            deleteKey.setCountryCode(countryCode);
+            worldService.deleteCountryLanguageById(deleteKey);
+            return ResponseEntity.ok(null);
+        }
+    }
+
+    //todo : add hateoas
+    @PutMapping("/{countryCode}/{language}")
+    public ResponseEntity<Countrylanguage> updateLanguage(@PathVariable String countryCode,@PathVariable String language, @RequestBody Countrylanguage countrylanguage){
+        if(!countryCode.equals(countrylanguage.getId().getCountryCode()) || !language.equals(countrylanguage.getId().getLanguage())){
+            return ResponseEntity.badRequest().body(null);
+        }
+        Optional<Countrylanguage> foundLanguage = worldService.getLanguageByCodeAndLanguage(countryCode,language);
+        if(foundLanguage.isEmpty()){
+            worldService.createCountryLanguage(countrylanguage);
+            return ResponseEntity.ok(countrylanguage);
+        }
+        worldService.updateCountryLanguageTable(language,countryCode,countrylanguage);
+
+        return ResponseEntity.ok(countrylanguage);
     }
 
 }

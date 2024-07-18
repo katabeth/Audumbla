@@ -12,9 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -207,7 +205,7 @@ public class WorldService {
     }
     public Optional<Countrylanguage> getLanguageByCodeAndLanguage(String code, String language){
         return countryLanguageRepository.findAll().stream()
-                .filter(countrylanguage -> code.equalsIgnoreCase(countrylanguage.getCountryCode().getCode()))
+                .filter(countrylanguage -> code.equalsIgnoreCase(countrylanguage.getId().getCountryCode()))
                 .filter(countrylanguage -> language.equalsIgnoreCase(countrylanguage.getId().getLanguage()))
                 .findFirst();
     }
@@ -222,6 +220,7 @@ public class WorldService {
             cityRepository.save(city);
         });
     }
+
     public void updateCountryTable (String countryCode, Country updatedCountry){
         getCountryByCountryCode(countryCode).ifPresent(country -> {
             country.setName(updatedCountry.getName());
@@ -241,6 +240,7 @@ public class WorldService {
             countryRepository.save(country);
         });
     }
+
     public void updateCountryLanguageTable (String language,String countryCode, Countrylanguage updatedCountryLanguage){
         getLanguageByCodeAndLanguage(countryCode,language).ifPresent(countrylanguage -> {
             countrylanguage.setPercentage(updatedCountryLanguage.getPercentage());
@@ -250,6 +250,7 @@ public class WorldService {
             countryLanguageRepository.save(countrylanguage);
         });
     }
+
     //Create methods
     public City createCity(City city) {
         nullCheck(city);
