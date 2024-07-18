@@ -30,6 +30,8 @@ public class CountryController {
     WorldService worldService;
     @Autowired
     private CountryRepository countryRepository;
+    @Autowired
+    private CountryLanguageRepository countryLanguageRepository;
 
 
     @GetMapping
@@ -71,7 +73,7 @@ public class CountryController {
         return ResponseEntity.created(location).body(EntityModel.of(country));
     }
     @PutMapping("/{countryCode}")
-    public ResponseEntity<Country> updateCountry(@PathVariable String countryCode, @RequestBody @Valid Country country) {
+    public ResponseEntity<Void> updateCountry(@PathVariable String countryCode, @RequestBody @Valid Country country) {
 
         if(!countryCode.equalsIgnoreCase(country.getCode())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -82,16 +84,17 @@ public class CountryController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @DeleteMapping("/{countryCode}")
-    public ResponseEntity<Country> deleteCountry(@PathVariable String countryCode) {
-        // Find the country
-        // If not found, return not found
+    public ResponseEntity<Void> deleteCountry(@PathVariable String countryCode) {
+
         if (worldService.getCountryByCountryCode(countryCode).isEmpty()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else if (!worldService.getCitiesByCountryCode(countryCode).isEmpty()){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } else if (!worldService.getCountryLanguageByCountryCode(countryCode).isEmpty()){
+            countryLanguageRepository.deleteAll(worldService.getCountryLanguageByCountryCode(countryCode));
         }
-        // How to manage conflicts with cities
-        // How to manage conflicts with language
         worldService.deleteCountryByCountryCode(countryCode);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        // Return No Content
     }
+
 }
