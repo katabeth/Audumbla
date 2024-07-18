@@ -1,20 +1,18 @@
 package com.sparta.audumbla.audumblaworldjpa.controllers;
 
 import com.sparta.audumbla.audumblaworldjpa.entities.City;
+import com.sparta.audumbla.audumblaworldjpa.exceptions.ResourceNotFoundException;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
-import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,6 +22,7 @@ public class CityController {
     //hateoas
     private final WorldService worldService;
 
+    @Autowired
     public CityController(WorldService worldService, CountryRepository countryRepository) {
         this.worldService = worldService;
     }
@@ -55,6 +54,9 @@ public class CityController {
     @GetMapping("/{id}")
     public EntityModel<Optional<City>> getCityById(@PathVariable Integer id) {
         Optional<City> city = worldService.getCitiesByID(id);
+        if(city.isEmpty()){
+            throw new ResourceNotFoundException("No city with id "+id+" exists");
+        }
         return EntityModel.of(city,
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
                         .methodOn(CityController.class)
@@ -71,7 +73,7 @@ public class CityController {
     }
 
     @PostMapping
-    public EntityModel<City> addCities(@RequestBody City city) {
+    public EntityModel<City> addCity(@RequestBody City city) {
         if(city.getCountryCode().toString().isEmpty()) {
             worldService.createCountry(city.getCountryCode());
         }
@@ -93,7 +95,7 @@ public class CityController {
     public EntityModel<City> putCity(@PathVariable Integer id, @RequestBody City city) {
 
         if (worldService.getCitiesByID(id).isEmpty()){
-            return addCities(city);
+            return addCity(city);
         }
         worldService.updateCityTable(city.getId(), city);
         return EntityModel.of(city,
@@ -112,7 +114,7 @@ public class CityController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCity(@PathVariable Integer id) {
         if (worldService.getCitiesByID(id).isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("Not city with id "+id+" exists");
         }
         worldService.deleteCityById(id);
         return ResponseEntity.noContent().build();
