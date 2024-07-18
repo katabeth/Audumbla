@@ -46,9 +46,9 @@ public class CountryController {
                         WebMvcLinkBuilder.linkTo(
                                 methodOn(CountryController.class).getCountryByCountryCode(country.getCode()))
                                 .withSelfRel(),
-//                        WebMvcLinkBuilder.linkTo(
-//                                methodOn(CityController.class).getCitiesByCountry(country.getCode()))
-//                                .withRel("cities"),
+                        WebMvcLinkBuilder.linkTo(
+                                methodOn(CityController.class).getAllCitiesFromCountry(country.getCode()))
+                                .withRel("cities"),
                         WebMvcLinkBuilder.linkTo(methodOn(LanguageController.class)
                                         .getLanguagesByCountry(country.getCode()))
                                 .withRel("languages")
