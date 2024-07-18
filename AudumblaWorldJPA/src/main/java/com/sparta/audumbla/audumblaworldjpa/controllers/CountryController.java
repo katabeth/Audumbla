@@ -85,7 +85,13 @@ public class CountryController {
     public ResponseEntity<Country> deleteCountry(@PathVariable String countryCode) {
         // Find the country
         // If not found, return not found
-        // How to manage conflicts with other tables
+        if (worldService.getCountryByCountryCode(countryCode).isEmpty()){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        // How to manage conflicts with cities
+        // How to manage conflicts with language
+        worldService.deleteCountryByCountryCode(countryCode);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         // Return No Content
     }
 }
