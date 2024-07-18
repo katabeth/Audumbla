@@ -241,8 +241,8 @@ public class WorldService {
             countryRepository.save(country);
         });
     }
-    public void updateCountryLanguageTable (String language,String countryCode, Countrylanguage updatedCountryLanguage){
-        getLanguageByCodeAndLanguage(countryCode,language).ifPresent(countrylanguage -> {
+    public void updateCountryLanguageTable (Countrylanguage updatedCountryLanguage){
+        getLanguageByCodeAndLanguage(updatedCountryLanguage.getId().getCountryCode(),updatedCountryLanguage.getId().getLanguage()).ifPresent(countrylanguage -> {
             countrylanguage.setPercentage(updatedCountryLanguage.getPercentage());
             countrylanguage.setCountryCode(updatedCountryLanguage.getCountryCode());
             countrylanguage.setIsOfficial(updatedCountryLanguage.getIsOfficial());
