@@ -11,7 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
+
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -35,27 +35,9 @@ public class LanguageController {
         this.worldService = worldService;
     }
 
-
-    private EntityModel<Countrylanguage> languageMapping(Countrylanguage language){
-        {
-            Link selfLink = WebMvcLinkBuilder.linkTo(methodOn(LanguageController.class).getLanguageByKey(language.getId().getCountryCode(),language.getId().getLanguage())).withSelfRel();
-            Link relLink =  WebMvcLinkBuilder.linkTo(methodOn(CountryController.class).getCountryByCountryCode(language.getCountryCode().getCode())).withRel("country");
-
-            return EntityModel.of(language, selfLink, relLink);
-        }
-    }
-
-    private CollectionModel<EntityModel<Countrylanguage>> languagesMapping(List<Countrylanguage> worldService) {
-        List<EntityModel<Countrylanguage>> languages = worldService
-                .stream()
-                .map(this::languageMapping)
-                .collect(Collectors.toList());
-        return CollectionModel.of(languages);
-    }
-
     @GetMapping
     public CollectionModel<EntityModel<Countrylanguage>> getAllLanguages() {
-        return languagesMapping(worldService.getAllCountryLanguages())
+        return ControllerUtils.languagesMapping(worldService.getAllCountryLanguages())
                 .add(WebMvcLinkBuilder.linkTo(methodOn(LanguageController.class).getAllLanguages()).withSelfRel());
     }
 
@@ -65,7 +47,7 @@ public class LanguageController {
         if(languages.isEmpty()){
             throw new ResourceNotFoundException("No languages of country"+countryCode+"Exist");
         }
-        return languagesMapping(languages)
+        return ControllerUtils.languagesMapping(languages)
                 .add(WebMvcLinkBuilder.linkTo(methodOn(LanguageController.class).getLanguagesByCountry(countryCode)).withSelfRel());
     }
 
@@ -76,7 +58,7 @@ public class LanguageController {
             throw new ResourceNotFoundException("No languages of key"+countryCode+","+language+"Exist");
         }
         return countryLanguage
-                .map(this::languageMapping)
+                .map(ControllerUtils::languageMapping)
                 .map(l -> new ResponseEntity<>(l,HttpStatus.OK))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -90,7 +72,7 @@ public class LanguageController {
         }
         worldService.createCountryLanguage(language);
         URI location = URI.create(request.getRequestURL().toString()+"/"+language.getId().getCountryCode()+"/"+language.getId().getLanguage());
-        return ResponseEntity.created(location).body(languageMapping(language));
+        return ResponseEntity.created(location).body(ControllerUtils.languageMapping(language));
     }
 
     @DeleteMapping("/{countryCode}/{language}")
@@ -115,11 +97,11 @@ public class LanguageController {
         Optional<Countrylanguage> foundLanguage = worldService.getLanguageByCodeAndLanguage(countryCode,language);
         if(foundLanguage.isEmpty()){
             worldService.createCountryLanguage(countrylanguage);
-            return ResponseEntity.ok(languageMapping(countrylanguage));
+            return ResponseEntity.ok(ControllerUtils.languageMapping(countrylanguage));
         }
         worldService.updateCountryLanguageTable(countrylanguage);
 
-        return ResponseEntity.ok(languageMapping(countrylanguage));
+        return ResponseEntity.ok(ControllerUtils.languageMapping(countrylanguage));
     }
 
 }
