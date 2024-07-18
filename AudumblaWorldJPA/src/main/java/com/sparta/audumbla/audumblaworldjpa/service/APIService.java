@@ -21,7 +21,6 @@ public class APIService {
                 .filter(key -> key.getApiKey().equals(APIKey))
                 .findFirst().orElse(null);
     }
-
     public Optional<String> generateAPIKey(String role) {
         if (!role.equals("FULL_ACCESS") && !role.equals("READ_ONLY"))
             return Optional.empty();
