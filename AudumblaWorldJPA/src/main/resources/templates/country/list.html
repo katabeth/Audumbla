@@ -8,7 +8,7 @@
 <h1>List of All Authors</h1>
 <p th:text="'Hi '+${msg}+'!'"></p>
 <ul>
-    <!--        th:if="${author.getFullName() == 'Katherine'}"-->
+
     <li th:each="author:${countries}">
         <span th:text="${countries.getName()}"></span>
     </li>
