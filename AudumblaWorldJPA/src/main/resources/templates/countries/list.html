@@ -52,6 +52,16 @@
                 <td th:text="${country.getHeadOfState()}"></td>
                 <td th:text="${country.getCapital()}"></td>
                 <td th:text="${country.getCode2()}"></td>
+                <td>
+                    <form th:action="@{/countries/delete/{countryCode}(countryCode=${country.getCode()})}" method="post">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/countries/update}" method="get">
+                        <input type="submit" value="Update">
+                    </form>
+                </td>
             </tr>
         </tbody>
     </table>

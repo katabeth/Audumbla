@@ -2,6 +2,8 @@ package com.sparta.audumbla.audumblaworldjpa.mvccontrollers;
 
 import com.sparta.audumbla.audumblaworldjpa.entities.Country;
 import com.sparta.audumbla.audumblaworldjpa.exceptions.DataMismatchException;
+import com.sparta.audumbla.audumblaworldjpa.exceptions.HasDependantsException;
+import com.sparta.audumbla.audumblaworldjpa.exceptions.ResourceNotFoundException;
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +49,22 @@ public class CountryMvcController {
             worldService.createCountry(country);
             return "redirect:/countries?search=" + country.getCode();
         }
+    }
+    @PostMapping("/delete/{countryCode}")
+    public String deleteCountry(@PathVariable String countryCode) {
+        if (worldService.getCountryByCountryCode(countryCode).isEmpty()){
+            throw new ResourceNotFoundException("Country with code "+countryCode+" does not exist to be deleted");
+        } else if (!worldService.getCitiesByCountryCode(countryCode).isEmpty()){
+            throw new HasDependantsException("The country " + countryCode +" cannot be deleted because cities depend on it");
+        } else if (!worldService.getCountryLanguagesByCountryCode(countryCode).isEmpty()){
+            worldService.deleteCountryLanguagesByCountryCode(countryCode);
+        }
+        worldService.deleteCountryByCountryCode(countryCode);
+        return "redirect:/countries";
+    }
+    @GetMapping("/update")
+    public String updateCountry(Model model) {
+
+
     }
 }
