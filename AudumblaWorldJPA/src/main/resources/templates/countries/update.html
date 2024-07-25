@@ -17,7 +17,6 @@
                 <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
 
                 <label for="continent">Continent: </label>
-<!--                <input type="text" name="continent" id="continent" required="required" th:value="${countryToEdit.continent}">-->
                 <select id="continent" name="continent" th:default="Asia">
                     <option th:each="continent : ${continents}" th:value="${continent}" th:text="${continent}"></option>
                 </select>

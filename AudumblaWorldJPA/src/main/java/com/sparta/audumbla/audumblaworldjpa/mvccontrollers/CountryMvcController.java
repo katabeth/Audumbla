@@ -22,7 +22,7 @@ public class CountryMvcController {
         this.worldService = worldService;
 
     }
-
+    // TODO Add search by each column
     @GetMapping
     public String getCountries(@RequestParam(required = false, defaultValue = "") String search, Model model) {
         if (!search.isEmpty()) {
