@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Language</title>
+</head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<form th:action="@{/languages/create}" method="post">
+
+    <label for="language">Language</label>
+    <input type="text" name="language" id="language">
+
+    <label for="percentage">Percentage of speakers</label>
+    <input type="text" name="percentage" id="percentage">
+
+    <label for="isOfficial">Is Official</label>
+    <input type="checkbox" name="isOfficial" id="isOfficial" value="T">
+
+    <label for="code">Country Code</label>
+    <select id="code" name="code">
+        <option th:each="code : ${countryCodes}" th:value="${code}" th:text="${code}"></option>
+    </select>
+
+
+    <button type="submit">Create</button>
+</form>
+</body>
+</html>
