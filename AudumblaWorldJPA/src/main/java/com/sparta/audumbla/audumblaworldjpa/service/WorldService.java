@@ -208,6 +208,17 @@ public class WorldService {
                 .filter(countrylanguage -> language.equalsIgnoreCase(countrylanguage.getId().getLanguage()))
                 .findFirst();
     }
+    public Set<String> getAllContinents(){
+        Set<String> continents = new HashSet<>();
+        continents.add("Asia");
+        continents.add("Africa");
+        continents.add("Antarctica");
+        continents.add("Europe");
+        continents.add("North America");
+        continents.add("Oceania");
+        continents.add("South America");
+        return continents;
+    }
     //Update methods
     public void updateCityTable (int id, City updatedCity){
         cityRepository.findById(id).ifPresent(city -> {

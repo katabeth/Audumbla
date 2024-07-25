@@ -64,6 +64,7 @@ public class CountryMvcController {
     public String updateCountry(@RequestParam() String currentCountry, Model model) {
         model.addAttribute("countryToEdit", worldService.getCountryByCountryCode(currentCountry)
                 .orElseThrow(() -> new ResourceNotFoundException("Country not found: " + currentCountry)));
+        model.addAttribute("continents", worldService.getAllContinents());
         return "countries/update";
     }
     @PostMapping("/update")
