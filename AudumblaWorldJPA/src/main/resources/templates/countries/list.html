@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1 th:text="${message}"></h1>
-    <form id = "myForm" action = "http://localhost:8080/countries?search=">
+    <form id = "searchForm" action = "http://localhost:8080/countries?search=">
         <label for = "search">Search for:</label>
         <!-- q is for query -->
         <input id = "search" name = "search" type = "text" value = "Country Code">
@@ -58,10 +58,12 @@
                     </form>
                 </td>
                 <td>
-                    <form th:action="@{/countries/update}" method="get">
-                        <input type="submit" value="Update">
+                    <form id = "update" action = "http://localhost:8080/countries/update?currentCountry=">
+                        <!-- q is for query -->
+                        <input name = "currentCountry" type = "hidden" th:value = "${country.getCode()}">
+                        <input class = "button" type = "submit" value = "update">
                     </form>
-                </td>
+
             </tr>
         </tbody>
     </table>

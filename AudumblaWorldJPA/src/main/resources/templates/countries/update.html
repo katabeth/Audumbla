@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Country Update</title>
+</head>
+<body>
+<h1>Update a Country</h1>
+<section>
+    <form th:action="@{/countries/update}" method="post" th:object="${countryToEdit}">
+        <fieldset>
+            <legend th:text="'Update ' +${countryToEdit.name}"> </legend>
+            <input type="hidden" id="countryCode" name="countryCode" required="required" th:field="${countryToEdit.code}">
+            <p>
+                <label for="name">Country Name: </label>
+                <input type="text" id="name" name="name" required="required" th:value="${countryToEdit.name}">
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+
+                <label for="continent">Continent: </label>
+                <input type="text" name="continent" id="continent" required="required" th:value="${countryToEdit.continent}">
+                <span th:if="${#fields.hasErrors('continent')}" th:errors="*{continent}"></span>
+            </p>
+
+            <p>
+                <label for="region">Region: </label>
+                <input type="text" name="region" id="region" required="required" th:value="${countryToEdit.region}">
+                <span th:if="${#fields.hasErrors('region')}" th:errors="*{region}"></span>
+
+                <label for="surfaceArea">Surface Area: </label>
+                <input type="number" name="surfaceArea" id="surfaceArea" required="required" th:value="${countryToEdit.surfaceArea}">
+                <span th:if="${#fields.hasErrors('surfaceArea')}" th:errors="*{surfaceArea}"></span>
+
+                <label for="indepYear">Independence Year: </label>
+                <input type="number" name="indepYear" id="indepYear" th:value="${countryToEdit.indepYear}">
+                <span th:if="${#fields.hasErrors('indepYear')}" th:errors="*{indepYear}"></span>
+            </p>
+            <p>
+                <label for="population">Population: </label>
+                <input type="number" name="population" id="population" required="required" th:value="${countryToEdit.population}">
+                <span th:if="${#fields.hasErrors('population')}" th:errors="*{population}"></span>
+
+                <label for="lifeExpectancy">Life Expectancy: </label>
+                <input type="number" name="lifeExpectancy" id="lifeExpectancy" th:value="${countryToEdit.lifeExpectancy}">
+                <span th:if="${#fields.hasErrors('lifeExpectancy')}" th:errors="*{lifeExpectancy}"></span>
+
+                <label for="gnp">GNP: </label>
+                <input type="number" name="gnp" id="gnp" th:value="${countryToEdit.gnp}">
+                <span th:if="${#fields.hasErrors('gnp')}" th:errors="*{gnp}"></span>
+            </p>
+            <p>
+                <label for="GNPOld">GNP Old: </label>
+                <input type="text" name="GNPOld" id="GNPOld" th:value="${countryToEdit.getGNPOld()}">
+                <span th:if="${#fields.hasErrors('GNPOld')}" th:errors="*{GNPOld}"></span>
+
+                <label for="localName">Local Name: </label>
+                <input type="text" name="localName" id="localName" required="required" th:value="${countryToEdit.localName}">
+                <span th:if="${#fields.hasErrors('localName')}" th:errors="*{localName}"></span>
+
+                <label for="governmentForm">Government Form: </label>
+                <input type="text" name="governmentForm" id="governmentForm" required="required" th:value="${countryToEdit.governmentForm}">
+                <span th:if="${#fields.hasErrors('governmentForm')}" th:errors="*{governmentForm}"></span>
+            </p>
+            <p>
+                <label for="headOfState">Head of State: </label>
+                <input type="text" name="headOfState" id="headOfState" th:value="${countryToEdit.headOfState}">
+<!--                <span th:if="${#fields.hasErrors('headOfState')}" th:errors="*{headOfState}"></span>-->
+
+                <label for="capital">Capital City ID: </label>
+                <input type="number" name="capital" id="capital" th:value="${countryToEdit.capital}">
+<!--                <span th:if="${#fields.hasErrors('capital')}" th:errors="*{capital}"></span>-->
+
+                <label for="code2">Short Country Code: </label>
+                <input type="text" name="code2" id="code2" required="required" th:value="${countryToEdit.code2}">
+<!--                <span th:if="${#fields.hasErrors('code2')}" th:errors="*{code2}"></span>-->
+            </p>
+            <p>
+                <button type="submit">Update Country</button>
+            </p>
+        </fieldset>
+    </form>
+</section>
+</body>
+</html>

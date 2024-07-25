@@ -52,9 +52,7 @@ public class CountryMvcController {
     }
     @PostMapping("/delete/{countryCode}")
     public String deleteCountry(@PathVariable String countryCode) {
-        if (worldService.getCountryByCountryCode(countryCode).isEmpty()){
-            throw new ResourceNotFoundException("Country with code "+countryCode+" does not exist to be deleted");
-        } else if (!worldService.getCitiesByCountryCode(countryCode).isEmpty()){
+        if (!worldService.getCitiesByCountryCode(countryCode).isEmpty()){
             throw new HasDependantsException("The country " + countryCode +" cannot be deleted because cities depend on it");
         } else if (!worldService.getCountryLanguagesByCountryCode(countryCode).isEmpty()){
             worldService.deleteCountryLanguagesByCountryCode(countryCode);
@@ -63,8 +61,20 @@ public class CountryMvcController {
         return "redirect:/countries";
     }
     @GetMapping("/update")
-    public String updateCountry(Model model) {
-
+    public String updateCountry(@RequestParam() String currentCountry, Model model) {
+        model.addAttribute("countryToEdit", worldService.getCountryByCountryCode(currentCountry)
+                .orElseThrow(() -> new ResourceNotFoundException("Country not found: " + currentCountry)));
+        return "countries/update";
+    }
+    @PostMapping("/update")
+    public String updateCountry(@Valid @ModelAttribute("countryToEdit") Country country, Errors errors) {
+//        country.setCode();
+        if (errors.hasErrors()) {
+            throw new DataMismatchException("Invalid country: " + errors);
+        } else {
+            worldService.updateCountryTable(country.getCode(),country);
+            return "redirect:/countries?search=" + country.getCode();
+        }
 
     }
 }
