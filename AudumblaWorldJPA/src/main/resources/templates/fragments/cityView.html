@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cities List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sandstone/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/styles.scss" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>Cities List</h1>
+
+    <form action="#" th:action="@{/cities/search}" method="get" class="form-inline">
+        <input type="text" id="name1" name="name" class="form-control" placeholder="Enter city name">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <form action="#" th:action="@{/cities}" method="get" class="form-inline">
+        <button type="submit" class="btn btn-primary">View All Cities</button>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>District</th>
+            <th>Population</th>
+            <th>Country Code</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="city : ${cityList}">
+            <td th:text="${city.id}">ID</td>
+            <td th:text="${city.name}">Name</td>
+            <td th:text="${city.district}">District</td>
+            <td th:text="${city.population}">Population</td>
+            <td th:text="${city.countryCode.code}">Country Code</td>
+            <td>
+                <form th:action="@{/cities/edit/{id}(id=${city.id})}" method="get" style="display:inline;">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/cities/delete/{id}(id=${city.id})}" method="post" style="display:inline;">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Update Form (Initially hidden) -->
+    <div th:if="${cityToEdit != null}">
+        <h2>Update City</h2>
+        <form action="#" th:action="@{/cities/update}" method="post" th:object="${cityToEdit}">
+            <input type="hidden" name="id" th:value="${cityToEdit.id}">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" th:value="${cityToEdit.name}"><br>
+            <label for="district">District:</label>
+            <input type="text" id="district" name="district" th:value="${cityToEdit.district}"><br>
+            <label for="population">Population:</label>
+            <input type="text" id="population" name="population" th:value="${cityToEdit.population}"><br>
+            <button type="submit" class="btn btn-primary">Update City</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -53,6 +53,11 @@ public class WorldService {
                 .filter(city -> name.equalsIgnoreCase(city.getName()))
                 .collect(Collectors.toList());
     }
+    public List<City> getCitiesByPartialName(String name) {
+        return cityRepository.findAll().stream()
+                .filter(city -> city.getName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
+    }
     public Optional<City> getCitiesByID(int id) {
         return cityRepository.findById(id);
     }
@@ -216,6 +221,15 @@ public class WorldService {
             city.setDistrict(updatedCity.getDistrict());
             city.setPopulation(updatedCity.getPopulation());
             city.setCountryCode(updatedCity.getCountryCode());
+            cityRepository.save(city);
+        });
+    }
+    public void updateCityTableMvc (int id, City updatedCity){
+        cityRepository.findById(id).ifPresent(city -> {
+            city.setName(updatedCity.getName());
+            city.setPopulation(updatedCity.getPopulation());
+            city.setDistrict(updatedCity.getDistrict());
+            city.setPopulation(updatedCity.getPopulation());
             cityRepository.save(city);
         });
     }
