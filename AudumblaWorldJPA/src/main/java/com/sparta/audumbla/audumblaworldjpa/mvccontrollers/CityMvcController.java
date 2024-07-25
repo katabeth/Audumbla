@@ -19,29 +19,26 @@ public class CityMvcController {
     private final WorldService worldService;
 
     @Autowired
-    public CityMvcController(CityRepository cityRepository, WorldService worldService) {
+    public CityMvcController(WorldService worldService) {
         this.worldService = worldService;
     }
 
-//    @GetMapping("/cities")
-//    public String listCities(Model model,
-//                             @RequestParam(name = "page", defaultValue = "0") int page,
-//                             @RequestParam(name = "size", defaultValue = "50") int size) {
-//        Page<City> cityPage = worldService.getCitiesPage(page, size);
-//        model.addAttribute("cityPage", cityPage);
-//        return "cities/cityView"; // name of your Thymeleaf template
-//    }
     @GetMapping()
-    public String getCities(Model model) {
-        List<City> cityList = worldService.getAllCities();
-        model.addAttribute("cityList", cityList);
-        return "cities/cityView";
-    }
+    public String getCities(Model model,
+                            @RequestParam(name = "page", defaultValue = "0") int page,
+                            @RequestParam(name = "size", defaultValue = "100") int size) {
+    Page<City> cityPage = worldService.getCitiesPage(page, size);
+    model.addAttribute("cityPage", cityPage);
+    return "cities/cityView";
+}
 
     @GetMapping("/search")
-    public String searchCityByCityName(@RequestParam("name") String name, Model model) {
-        List<City> city = worldService.getCitiesByPartialName(name);
-        model.addAttribute("cityList", city);
+    public String searchCityByCityName(@RequestParam("name") String name, Model model,
+                                       @RequestParam(name = "page", defaultValue = "0") int page,
+                                       @RequestParam(name = "size", defaultValue = "100") int size) {
+        Page<City> cityPage = worldService.getCitiesByPartialNamePage(name, page, size);
+
+        model.addAttribute("cityPage", cityPage);
         return "cities/cityView";
     }
 
@@ -83,7 +80,6 @@ public class CityMvcController {
         model.addAttribute("newCity", new City());
         model.addAttribute("countries", worldService.getAllCountries());
         model.addAttribute("code", code);
-//        model.addAttribute("countryCodes", worldService.getAllCountries().stream().map(Country::getCode).toList());
         return "cities/addCity";
     }
 

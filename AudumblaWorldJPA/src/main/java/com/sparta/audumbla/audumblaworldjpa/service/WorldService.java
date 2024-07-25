@@ -6,6 +6,7 @@ import com.sparta.audumbla.audumblaworldjpa.repositories.CountryLanguageReposito
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,17 @@ public class WorldService {
         Pageable pageable = PageRequest.of(page, size);
         return cityRepository.findAll(pageable);
     }
+    public Page<City> getCitiesByPartialNamePage(String name, int page, int size) {
+        List<City> cities = cityRepository.findAll().stream()
+                .filter(city -> city.getName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
 
+        int fromIndex = (page - 1) * size;
+        int toIndex = Math.min(fromIndex + size, cities.size());
+
+        List<City> paginatedCities = cities.subList(fromIndex, toIndex);
+        return new PageImpl<>(paginatedCities, PageRequest.of(page, size), cities.size());
+    }
     @Transactional
     public List<City> getAllCities() {
         return cityRepository.findAll();
