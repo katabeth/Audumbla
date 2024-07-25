@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List Countries</title>
+</head>
+//TODO: Add pagination
+//TODO: Add Style
+<body>
+    <h1 th:text="${message}"></h1>
+    <form id = "searchForm" action = "http://localhost:8080/countries?search=">
+        <label for = "search">Search for:</label>
+        <input id = "search" name = "search" type = "text" value = "Country Code">
+        <input class = "button" type = "submit" value = "Submit">
+    </form>
+    <table class = "table table-dark">
+        <!-- table headers -->
+        <thead>
+        <!-- table rows -->
+        <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Continent</th>
+            <th>Region</th>
+            <th>Surface Area</th>
+            <th>Independence Year</th>
+            <th>Population</th>
+            <th>Life Expectancy</th>
+            <th>GNP</th>
+            <th>GNP Old</th>
+            <th>Local Name</th>
+            <th>Government Form</th>
+            <th>Head of State</th>
+            <th>Capital</th>
+            <th>Short Code</th>
+        </tr>
+        </thead>
+        <!-- table data -->
+        <tbody>
+            <tr th:each="country : ${countries.stream().toList()}">
+                <td th:text="${country.getCode()}"></td>
+                <td th:text="${country.getName()}"></td>
+                <td th:text="${country.getContinent()}"></td>
+                <td th:text="${country.getRegion()}"></td>
+                <td th:text="${country.getSurfaceArea()}"></td>
+                <td th:text="${country.getIndepYear()}"></td>
+                <td th:text="${country.getPopulation()}"></td>
+                <td th:text="${country.getLifeExpectancy()}"></td>
+                <td th:text="${country.getGnp()}"></td>
+                <td th:text="${country.getGNPOld()}"></td>
+                <td th:text="${country.getLocalName()}"></td>
+                <td th:text="${country.getGovernmentForm()}"></td>
+                <td th:text="${country.getHeadOfState()}"></td>
+                <td th:text="${country.getCapital()}"></td>
+                <td th:text="${country.getCode2()}"></td>
+                <td>
+                    <form th:action="@{/countries/delete/{countryCode}(countryCode=${country.getCode()})}" method="post">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+                <td>
+                    <form id = "update" action = "http://localhost:8080/countries/update?currentCountry=">
+                        <input name = "currentCountry" type = "hidden" th:value = "${country.getCode()}">
+                        <input class = "button" type = "submit" value = "Update">
+                    </form>
+
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
