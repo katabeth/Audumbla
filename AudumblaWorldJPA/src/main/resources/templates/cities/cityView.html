@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cities List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sandstone/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/styles.scss" rel="stylesheet">
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this city?');
+        }
+    </script>
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">Cities List</h1>
+
+    <!-- Row for Search and Buttons -->
+    <div class="row mb-4 align-items-center">
+        <!-- Search Form -->
+        <div class="col-md-6">
+            <form class="d-flex" action="#" th:action="@{/cities/search}" method="get">
+                <input type="text" id="name1" name="name" class="form-control me-2" placeholder="Enter city name" style="max-width: 300px;">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+        <!-- Buttons -->
+        <div class="col-md-6 text-end">
+            <form action="#" th:action="@{/cities}" method="get" class="d-inline me-2">
+                <button type="submit" class="btn btn-primary">View All Cities</button>
+            </form>
+            <form action="#" th:action="@{/cities/add}" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success">Add New City</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>District</th>
+                <th>Population</th>
+                <th>Country Code</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="city : ${cityList}">
+                <td th:text="${city.id}">ID</td>
+                <td th:text="${city.name}">Name</td>
+                <td th:text="${city.district}">District</td>
+                <td th:text="${city.population}">Population</td>
+                <td th:text="${city.countryCode.code}">Country Code</td>
+                <td>
+                    <form th:action="@{/cities/edit/{id}(id=${city.id})}" method="get" style="display:inline;">
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/cities/delete/{id}(id=${city.id})}" method="post" style="display:inline;" onsubmit="return confirmDelete()">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

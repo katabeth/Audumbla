@@ -5,6 +5,9 @@ import com.sparta.audumbla.audumblaworldjpa.repositories.CityRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryLanguageRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +36,11 @@ public class WorldService {
     }
     // READ and UPDATE for all Tables
     // READ all cities, countries, languages
+
+    public Page<City> getCitiesPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return cityRepository.findAll(pageable);
+    }
 
     @Transactional
     public List<City> getAllCities() {
@@ -224,15 +232,7 @@ public class WorldService {
             cityRepository.save(city);
         });
     }
-    public void updateCityTableMvc (int id, City updatedCity){
-        cityRepository.findById(id).ifPresent(city -> {
-            city.setName(updatedCity.getName());
-            city.setPopulation(updatedCity.getPopulation());
-            city.setDistrict(updatedCity.getDistrict());
-            city.setPopulation(updatedCity.getPopulation());
-            cityRepository.save(city);
-        });
-    }
+
     public void updateCountryTable (String countryCode, Country updatedCountry){
         getCountryByCountryCode(countryCode).ifPresent(country -> {
             country.setName(updatedCountry.getName());
@@ -264,6 +264,7 @@ public class WorldService {
     //Create methods
     public City createCity(City city) {
         nullCheck(city);
+        city.getCountryCode();
         return cityRepository.save(city);
     }
 
