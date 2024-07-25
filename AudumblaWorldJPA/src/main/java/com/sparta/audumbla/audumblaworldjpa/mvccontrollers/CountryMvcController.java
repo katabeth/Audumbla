@@ -69,10 +69,10 @@ public class CountryMvcController {
     }
     @PostMapping("/update")
     public String updateCountry(@Valid @ModelAttribute("countryToEdit") Country country, Errors errors) {
-//        country.setCode();
         if (errors.hasErrors()) {
             throw new DataMismatchException("Invalid country: " + errors);
         } else {
+
             worldService.updateCountryTable(country.getCode(),country);
             return "redirect:/countries?search=" + country.getCode();
         }

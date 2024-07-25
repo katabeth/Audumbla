@@ -18,8 +18,8 @@
 
                 <label for="continent">Continent: </label>
 <!--                <input type="text" name="continent" id="continent" required="required" th:value="${countryToEdit.continent}">-->
-                <select id="continent" name="continent">
-                    <option th:each="continents : ${continents}" th:value="${countryToEdit.continent}" th:text="${countryToEdit.continent}"></option>
+                <select id="continent" name="continent" th:default="Asia">
+                    <option th:each="continent : ${continents}" th:value="${continent}" th:text="${continent}"></option>
                 </select>
                 <span th:if="${#fields.hasErrors('continent')}" th:errors="*{continent}"></span>
             </p>
