@@ -21,10 +21,15 @@ public class LanguageMvcController {
     }
 
     @GetMapping
-    public String getLanguages(Model model) {
-        model.addAttribute("languages", worldService.getAllCountryLanguages());
+    public String getLanguages(Model model, @RequestParam(value = "search", required = false, defaultValue = "") String searchQuery) {
+        if(searchQuery.isEmpty()) {
+            model.addAttribute("languages", worldService.getAllCountryLanguages());
+        } else{
+            model.addAttribute("languages", worldService.getCountryLanguagesByLanguage(searchQuery,false));
+        }
         return "languages/list";
     }
+
 
     @PostMapping("/delete/{countryCode}/{languageText}")
     public String deleteLanguage(@PathVariable String countryCode, @PathVariable String languageText) {

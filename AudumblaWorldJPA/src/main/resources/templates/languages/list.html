@@ -10,6 +10,14 @@
     <a href="/languages/create">Add New Language</a>
 </section>
 <section>
+    <form th:action="@{/languages}" method="get">
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search" th:value="${searchQuery}" placeholder="Enter language"/>
+        <p th:text="${searchQuery}"></p>
+        <button type="submit">Search</button>
+    </form>
+</section>
+<section>
     <table>
         <tr>
             <th>Language</th>
