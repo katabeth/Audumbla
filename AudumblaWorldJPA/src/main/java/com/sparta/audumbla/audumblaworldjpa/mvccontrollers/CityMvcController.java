@@ -35,5 +35,25 @@ public class CityMvcController {
         return "fragments/cityView";
     }
 
+    @GetMapping("/edit/{id}")
+    public String editCity(@PathVariable int id, Model model) {
+        Optional<City> city = worldService.getCitiesByID(id);
+        if (city.isPresent()) {
+            model.addAttribute("cityToEdit", city.orElseThrow());
+        }
+        return "fragments/cityView";
+    }
+
+    @PostMapping("/update")
+    public String updateCity(@ModelAttribute City city, Model model) {
+
+
+        worldService.updateCityTableMvc(city.getId(), city);
+
+        List<City> cityList = worldService.getAllCities();
+        model.addAttribute("cityList", cityList);
+
+        return "fragments/cityView";
+    }
 
 }
