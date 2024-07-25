@@ -2,20 +2,26 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Update ' + ${language.getId().getLanguage()}"></title>
+    <title th:text="'Update ' + ${language.getId().getLanguage()}">Update Language</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sandstone/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/styles.scss" rel="stylesheet">
 </head>
 <body>
 <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 
-<form th:action="@{/languages/update/{codeOfCountry}/{languageText}(codeOfCountry=${language.getId().getCountryCode()},languageText=${language.getId().getLanguage()})}" method="post">
-balls
-    <label for="percentage">Percentage of speakers</label>
-    <input type="text" name="percentage" id="percentage"  th:value="${language.getPercentage()}">
-
-    <label for="isOfficial">Is Official</label>
-    <input type="checkbox" name="isOfficial" id="isOfficial" th:default="F" value="T">
-
-    <button type="submit">Update</button>
-</form>
+<div class="container mt-4">
+    <h2 th:text="'Update ' + ${language.getId().getLanguage()}">Update Language</h2>
+    <form th:action="@{/languages/update/{codeOfCountry}/{languageText}(codeOfCountry=${language.getId().getCountryCode()},languageText=${language.getId().getLanguage()})}" method="post">
+        <div class="mb-3">
+            <label for="percentage" class="form-label">Percentage of speakers:</label>
+            <input type="text" name="percentage" id="percentage" class="form-control" th:value="${language.getPercentage()}">
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="isOfficial" id="isOfficial" class="form-check-input" th:checked="${language.getIsOfficial() == 'T'}" value="T">
+            <label for="isOfficial" class="form-check-label">Is Official</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
 </body>
 </html>
