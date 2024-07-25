@@ -1,6 +1,7 @@
 package com.sparta.audumbla.audumblaworldjpa.mvccontrollers;
 
 import com.sparta.audumbla.audumblaworldjpa.entities.Country;
+import com.sparta.audumbla.audumblaworldjpa.exceptions.DataMismatchException;
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/countries")
 public class CountryMvcController {
     private final WorldService worldService;
+
     @Autowired
     public CountryMvcController(WorldService worldService) {
         this.worldService = worldService;
@@ -36,14 +38,14 @@ public class CountryMvcController {
         model.addAttribute("country", new Country());
         return "countries/create";
     }
+
     @PostMapping("/create")
     public String createCountry(@Valid @ModelAttribute("country") Country country, Errors errors) {
         if (errors.hasErrors()) {
-            return "countries/create";
+            throw new DataMismatchException("Invalid country: " + errors);
         } else {
             worldService.createCountry(country);
             return "redirect:/countries?search=" + country.getCode();
         }
     }
-
 }
