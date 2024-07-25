@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Languages</title>
+</head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<section>
+    <a href="/languages/create">Add New Language</a>
+</section>
+<section>
+    <form th:action="@{/languages}" method="get">
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search" th:value="${searchQuery}" placeholder="Enter language"/>
+        <p th:text="${searchQuery}"></p>
+        <button type="submit">Search</button>
+    </form>
+</section>
+<section>
+    <table>
+        <tr>
+            <th>Language</th>
+            <th>Country Code</th>
+            <th>Delete</th>
+            <th>Update</th>
+        </tr>
+        <tr th:each="language : ${languages}">
+            <td th:text="${language.getId().getLanguage()}"></td>
+            <td th:text="${language.getId().getCountryCode()}"></td>
+            <td>
+                <form th:action="@{/languages/delete/{countryCode}/{language}(countryCode=${language.getId().getCountryCode()},language=${language.getId().getLanguage()})}" method="post">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/languages/update/{countryCode}/{language}(countryCode=${language.getId().getCountryCode()},language=${language.getId().getLanguage()})}" method="get">
+                    <input type="hidden" name="_method" value="UPDATE">
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+
+</section>
+</body>
+</html>

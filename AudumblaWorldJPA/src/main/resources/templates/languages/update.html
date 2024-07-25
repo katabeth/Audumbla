@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Update ' + ${language.getId().getLanguage()}"></title>
+</head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<form th:action="@{/languages/update/{codeOfCountry}/{languageText}(codeOfCountry=${language.getId().getCountryCode()},languageText=${language.getId().getLanguage()})}" method="post">
+balls
+    <label for="percentage">Percentage of speakers</label>
+    <input type="text" name="percentage" id="percentage"  th:value="${language.getPercentage()}">
+
+    <label for="isOfficial">Is Official</label>
+    <input type="checkbox" name="isOfficial" id="isOfficial" th:default="F" value="T">
+
+    <button type="submit">Update</button>
+</form>
+</body>
+</html>

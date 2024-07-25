@@ -180,6 +180,17 @@ public class WorldService {
                 .filter(countrylanguage -> countrylanguage.getId().getLanguage().contains(language))
                 .toList();
     }
+    public List<Countrylanguage> getCountryLanguagesByLanguage(String language, Boolean caseSensitive){
+        if (!caseSensitive) {
+            return countryLanguageRepository.findAll().stream()
+                    .filter(countrylanguage -> countrylanguage.getId().getLanguage().toLowerCase().contains(language.toLowerCase()))
+                    .toList();
+        }
+        else {
+            return getCountryLanguagesByLanguage(language);
+        }
+    }
+
     public List<Countrylanguage> getCountryLanguagesByIsOfficial(boolean isOfficial){
         String condition = "";
         if (isOfficial) {
