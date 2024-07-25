@@ -63,15 +63,15 @@
             <p>
                 <label for="headOfState">Head of State: </label>
                 <input type="text" name="headOfState" id="headOfState" th:value="${countryToEdit.headOfState}">
-<!--                <span th:if="${#fields.hasErrors('headOfState')}" th:errors="*{headOfState}"></span>-->
+                <span th:if="${#fields.hasErrors('headOfState')}" th:errors="*{headOfState}"></span>
 
                 <label for="capital">Capital City ID: </label>
                 <input type="number" name="capital" id="capital" th:value="${countryToEdit.capital}">
-<!--                <span th:if="${#fields.hasErrors('capital')}" th:errors="*{capital}"></span>-->
+                <span th:if="${#fields.hasErrors('capital')}" th:errors="*{capital}"></span>
 
                 <label for="code2">Short Country Code: </label>
                 <input type="text" name="code2" id="code2" required="required" th:value="${countryToEdit.code2}">
-<!--                <span th:if="${#fields.hasErrors('code2')}" th:errors="*{code2}"></span>-->
+                <span th:if="${#fields.hasErrors('code2')}" th:errors="*{code2}"></span>
             </p>
             <p>
                 <button type="submit">Update Country</button>
