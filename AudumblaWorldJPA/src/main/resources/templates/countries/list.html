@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <title>List Countries</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sandstone/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
     <script>
         function confirmDelete() {
             return confirm('Are you sure you want to delete this country?');
         }
     </script>
 </head>
-<body>
+<body class="container-bg2">
 <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 <div class="container mt-4">
     <h1 class="mb-4" th:text="${message}"></h1>

@@ -1,11 +1,15 @@
-.container{
+.container-bg{
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     color: black;
-    background: url('/spots2.jpg');
+    background-image: url('img/spots2.jpg');
     background-size: cover;
 }
-
+.container-bg2{
+    background-image: url('img/spots2.jpg');
+    background-size: contain;
+    background-repeat: repeat-y;
+}
 .home{
     display: flex;
     flex-flow: column;

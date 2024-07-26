@@ -5,11 +5,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/welcome")
+@RequestMapping
 public class WelcomeMvcController {
 
-    @GetMapping
+    @GetMapping("/welcome")
     public String getWelcome(Model model) {
+        return "welcomes/welcome";
+    }
+    @GetMapping
+    public String redirectToWelcome(Model model) {
         return "welcomes/welcome";
     }
 }

@@ -2,6 +2,7 @@ package com.sparta.audumbla.audumblaworldjpa.config;
 
 import com.sparta.audumbla.audumblaworldjpa.service.AudumblaSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -27,7 +28,8 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/", "/welcome","/error") .permitAll()
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .requestMatchers("/", "/welcome","/error","*/static/*") .permitAll()
                         .requestMatchers("/cities", "/countries", "/languages").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/create", "/delete","/update").hasRole("ADMIN")
                         .anyRequest().authenticated())
