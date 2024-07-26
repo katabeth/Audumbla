@@ -6,9 +6,9 @@
     background-size: cover;
 }
 .container-bg2{
-    background-image: url('img/spots2.jpg');
-    background-size: contain;
-    background-repeat: repeat-y;
+    background-image: url('img/spots3.jpg');
+    background-size: auto;
+
 }
 .home{
     display: flex;

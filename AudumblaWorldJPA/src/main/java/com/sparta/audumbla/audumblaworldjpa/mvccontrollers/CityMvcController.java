@@ -1,6 +1,7 @@
 package com.sparta.audumbla.audumblaworldjpa.mvccontrollers;
 
 import com.sparta.audumbla.audumblaworldjpa.entities.City;
+import com.sparta.audumbla.audumblaworldjpa.entities.Country;
 import com.sparta.audumbla.audumblaworldjpa.exceptions.ResourceNotFoundException;
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +51,9 @@ public class CityMvcController {
         if (city.isPresent()) {
             model.addAttribute("cityToEdit", city.orElseThrow());
         }
-        model.addAttribute("countries", worldService.getAllCountries());
+        List<Country> countries = worldService.getAllCountries();
+        countries.sort(Comparator.comparing(Country::getName));
+        model.addAttribute("countries", countries);
         return "cities/update";
     }
 
