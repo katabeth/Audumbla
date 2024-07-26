@@ -27,9 +27,9 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/", "/welcome").permitAll()
-                        .requestMatchers("/cities/", "/countries/", "/languages").permitAll()
-                        //.requestMatchers("/create", "/delete","/update").hasRole("ADMIN")
+                        .requestMatchers("/", "/welcome","/error") .permitAll()
+                        .requestMatchers("/cities", "/countries", "/languages").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/create", "/delete","/update").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .userDetailsService(audumblaSecurity)
                 .formLogin(Customizer.withDefaults())
