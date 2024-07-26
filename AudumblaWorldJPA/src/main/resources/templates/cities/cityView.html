@@ -18,7 +18,7 @@
     <div class="row mb-4 align-items-center">
         <div class="col-md-6">
             <form class="d-flex" action="#" th:action="@{/cities/search}" method="get">
-                <input type="text" id="name1" name="name" class="form-control me-2" placeholder="Enter city name" style="max-width: 300px;">
+                <input type="text" id="name1" name="name" class="form-control me-2" th:value = "${name}" placeholder="Enter city">
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>

@@ -3,85 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <title>Country Creation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sandstone/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<h1>Create a Country</h1>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<div class="container mt-4">
+    <h2>Create a Country</h2>
+    <form action = "#" th:action="@{/countries/add}" method="post" th:object="${country}">
+        <div class="mb-3">
+            <label for="countryCode" class="form-label">Country Code: </label>
+            <input type="text" th:field="*{code}" id="countryCode" required="required" class="form-control">
+            <span th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></span>
 
-<section>
-    <form method="post" th:object="${country}">
-        <fieldset>
-            <legend>Create a Country</legend>
-            <p>
-                <label for="countryCode">Country Code: </label>
-                <input type="text" th:field="*{code}" id="countryCode" required="required">
-                <span th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></span>
+            <label for="countryName" class="form-label">Country Name: </label>
+            <input type="text" th:field="*{name}" id="countryName" required="required" class="form-control">
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
 
-                <label for="countryName">Country Name: </label>
-                <input type="text" th:field="*{name}" id="countryName" required="required">
-                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+            <label for="continent" class="form-label">Continent: </label>
+            <select id="continent" name="continent" th:default="Asia" class="form-select">
+                <option th:each="continent : ${continents}" th:value="${continent}" th:text="${continent}"></option>
+            </select>
+            <span th:if="${#fields.hasErrors('continent')}" th:errors="*{continent}"></span>
+        </div>
+        <div class="mb-3">
+            <label for="region" class="form-label">Region: </label>
+            <input type="text" th:field="*{region}" id="region" required="required" class="form-control">
+            <span th:if="${#fields.hasErrors('region')}" th:errors="*{region}"></span>
 
-                <label for="continent">Continent: </label>
-                <input type="text" th:field="*{continent}" id="continent" required="required">
-                <span th:if="${#fields.hasErrors('continent')}" th:errors="*{continent}"></span>
-            </p>
+            <label for="surfaceArea" class="form-label">Surface Area: </label>
+            <input type="number" th:field="*{surfaceArea}" id="surfaceArea" required="required" class="form-control">
+            <span th:if="${#fields.hasErrors('surfaceArea')}" th:errors="*{surfaceArea}"></span>
 
-            <p>
-                <label for="region">Region: </label>
-                <input type="text" th:field="*{region}" id="region" required="required">
-                <span th:if="${#fields.hasErrors('region')}" th:errors="*{region}"></span>
+            <label for="indepYear" class="form-label">Independence Year: </label>
+            <input type="number" th:field="*{indepYear}" id="indepYear" class="form-control">
+            <span th:if="${#fields.hasErrors('indepYear')}" th:errors="*{indepYear}"></span>
+        </div>
+        <div class="mb-3">
+            <label for="population" class="form-label">Population: </label>
+            <input type="number" th:field="*{population}" id="population" required="required" class="form-control">
+            <span th:if="${#fields.hasErrors('population')}" th:errors="*{population}"></span>
 
-                <label for="surfaceArea">Surface Area: </label>
-                <input type="number" th:field="*{surfaceArea}" id="surfaceArea" required="required">
-                <span th:if="${#fields.hasErrors('surfaceArea')}" th:errors="*{surfaceArea}"></span>
+            <label for="lifeExpectancy" class="form-label">Life Expectancy: </label>
+            <input type="number" th:field="*{lifeExpectancy}" id="lifeExpectancy" class="form-control">
+            <span th:if="${#fields.hasErrors('lifeExpectancy')}" th:errors="*{lifeExpectancy}"></span>
 
-                <label for="indepYear">Independence Year: </label>
-                <input type="number" th:field="*{indepYear}" id="indepYear">
-                <span th:if="${#fields.hasErrors('indepYear')}" th:errors="*{indepYear}"></span>
-            </p>
-            <p>
-                <label for="population">Population: </label>
-                <input type="number" th:field="*{population}" id="population" required="required">
-                <span th:if="${#fields.hasErrors('population')}" th:errors="*{population}"></span>
+            <label for="gnp" class="form-label">GNP: </label>
+            <input type="number" th:field="*{gnp}" id="gnp" class="form-control">
+            <span th:if="${#fields.hasErrors('gnp')}" th:errors="*{gnp}"></span>
+        </div>
+        <div class="mb-3">
+            <label for="GNPOld" class="form-label">GNP Old: </label>
+            <input type="text" th:field="*{GNPOld}" id="GNPOld" class="form-control">
+            <span th:if="${#fields.hasErrors('GNPOld')}" th:errors="*{GNPOld}"></span>
 
-                <label for="lifeExpectancy">Life Expectancy: </label>
-                <input type="number" th:field="*{lifeExpectancy}" id="lifeExpectancy">
-                <span th:if="${#fields.hasErrors('lifeExpectancy')}" th:errors="*{lifeExpectancy}"></span>
+            <label for="localName" class="form-label">Local Name: </label>
+            <input type="text" th:field="*{localName}" id="localName" required="required" class="form-control">
+            <span th:if="${#fields.hasErrors('localName')}" th:errors="*{localName}"></span>
 
-                <label for="gnp">GNP: </label>
-                <input type="number" th:field="*{gnp}" id="gnp">
-                <span th:if="${#fields.hasErrors('gnp')}" th:errors="*{gnp}"></span>
-            </p>
-            <p>
-                <label for="GNPOld">GNP Old: </label>
-                <input type="text" th:field="*{GNPOld}" id="GNPOld">
-                <span th:if="${#fields.hasErrors('GNPOld')}" th:errors="*{GNPOld}"></span>
+            <label for="governmentForm" class="form-label">Government Form: </label>
+            <input type="text" th:field="*{governmentForm}" id="governmentForm" required="required" class="form-control">
+            <span th:if="${#fields.hasErrors('governmentForm')}" th:errors="*{governmentForm}"></span>
+        </div>
+        <div class="mb-3">
+            <label for="headOfState" class="form-label">Head of State: </label>
+            <input type="text" th:field="*{headOfState}" id="headOfState" class="form-control">
+            <span th:if="${#fields.hasErrors('headOfState')}" th:errors="*{headOfState}"></span>
 
-                <label for="localName">Local Name: </label>
-                <input type="text" th:field="*{localName}" id="localName" required="required">
-                <span th:if="${#fields.hasErrors('localName')}" th:errors="*{localName}"></span>
+            <label for="capital" class="form-label">Capital City ID: </label>
+            <input type="number" th:field="*{capital}" id="capital" class="form-control">
+            <span th:if="${#fields.hasErrors('capital')}" th:errors="*{capital}"></span>
 
-                <label for="governmentForm">Government Form: </label>
-                <input type="text" th:field="*{governmentForm}" id="governmentForm" required="required">
-                <span th:if="${#fields.hasErrors('governmentForm')}" th:errors="*{governmentForm}"></span>
-            </p>
-            <p>
-                <label for="headOfState">Head of State: </label>
-                <input type="text" th:field="*{headOfState}" id="headOfState">
-                <span th:if="${#fields.hasErrors('headOfState')}" th:errors="*{headOfState}"></span>
-
-                <label for="capital">Capital City ID: </label>
-                <input type="number" th:field="*{capital}" id="capital">
-                <span th:if="${#fields.hasErrors('capital')}" th:errors="*{capital}"></span>
-
-                <label for="code2">Short Country Code: </label>
-                <input type="text" th:field="*{code2}" id="code2" required="required">
-                <span th:if="${#fields.hasErrors('code2')}" th:errors="*{code2}"></span>
-            </p>
-            <p>
-                <button type="submit">Create</button>
-            </p>
-        </fieldset>
+            <label for="code2" class="form-label">Short Country Code: </label>
+            <input type="text" th:field="*{code2}" id="code2" required="required" class="form-control">
+            <span th:if="${#fields.hasErrors('code2')}" th:errors="*{code2}"></span>
+        </div>
+        <button  type="submit" class="btn btn-primary">Create</button>
     </form>
-</section>
+</div>
 </body>
 </html>

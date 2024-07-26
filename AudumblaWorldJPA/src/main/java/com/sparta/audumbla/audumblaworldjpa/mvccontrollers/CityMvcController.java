@@ -37,6 +37,7 @@ public class CityMvcController {
                                        @RequestParam(name = "page", defaultValue = "0") int page,
                                        @RequestParam(name = "size", defaultValue = "100") int size) {
         Page<City> cityPage = worldService.getCitiesByPartialNamePage(name, page, size);
+        model.addAttribute("name", name);
         model.addAttribute("cityPage", cityPage);
         return "cities/cityView";
     }
