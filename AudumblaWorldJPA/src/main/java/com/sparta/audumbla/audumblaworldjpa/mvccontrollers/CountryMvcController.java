@@ -27,6 +27,7 @@ public class CountryMvcController {
     public String getCountries(@RequestParam(required = false, defaultValue = "") String search, Model model) {
         if (!search.isEmpty()) {
             model.addAttribute("countries", worldService.getCountryByCountryCode(search));
+            model.addAttribute("countryCode", search);
             model.addAttribute("message", "Showing results for: " + search);
         } else {
             model.addAttribute("countries", worldService.getAllCountries());
