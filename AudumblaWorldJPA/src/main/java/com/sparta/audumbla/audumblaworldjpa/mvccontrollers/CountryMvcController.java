@@ -38,6 +38,7 @@ public class CountryMvcController {
     @GetMapping("/create")
     public String createCountry(Model model) {
         model.addAttribute("country", new Country());
+        model.addAttribute("continents", worldService.getAllContinents());
         return "countries/create";
     }
 
