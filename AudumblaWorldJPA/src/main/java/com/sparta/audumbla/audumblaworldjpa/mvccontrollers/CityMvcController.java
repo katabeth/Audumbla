@@ -27,17 +27,16 @@ public class CityMvcController {
     public String getCities(Model model,
                             @RequestParam(name = "page", defaultValue = "0") int page,
                             @RequestParam(name = "size", defaultValue = "100") int size) {
-    Page<City> cityPage = worldService.getCitiesPage(page, size);
-    model.addAttribute("cityPage", cityPage);
-    return "cities/cityView";
-}
+        Page<City> cityPage = worldService.getCitiesPage(page, size);
+        model.addAttribute("cityPage", cityPage);
+        return "cities/cityView";
+    }
 
     @GetMapping("/search")
     public String searchCityByCityName(@RequestParam("name") String name, Model model,
                                        @RequestParam(name = "page", defaultValue = "0") int page,
                                        @RequestParam(name = "size", defaultValue = "100") int size) {
         Page<City> cityPage = worldService.getCitiesByPartialNamePage(name, page, size);
-
         model.addAttribute("cityPage", cityPage);
         return "cities/cityView";
     }
@@ -61,7 +60,7 @@ public class CityMvcController {
         List<City> cityList = worldService.getAllCities();
         model.addAttribute("cityList", cityList);
 
-        return "cities/cityView";
+        return "redirect:/cities";
     }
 
     @PostMapping("/delete/{id}")
