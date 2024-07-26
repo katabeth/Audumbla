@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add City</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sandstone/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/styles.scss" rel="stylesheet">
+</head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<div class="container mt-4">
+    <h2>Create City</h2>
+    <form action="#" th:action="@{/cities/add}" method="post" th:object="${newCity}">
+        <input type="hidden" name="id" th:value="${newCity.id}">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" id="name" name="name" class="form-control" th:value="${newCity.name}">
+        </div>
+        <div class="mb-3">
+            <label for="district" class="form-label">District:</label>
+            <input type="text" id="district" name="district" class="form-control" th:value="${newCity.district}">
+        </div>
+        <div class="mb-3">
+            <label for="population" class="form-label">Population:</label>
+            <input type="text" id="population" name="population" class="form-control" th:value="${newCity.population}">
+        </div>
+        <div class="mb-3">
+            <label for="code" class="form-label">Country:</label>
+            <select id="code" name="code" class="form-select">
+                <option th:each="country : ${countries}" th:value="${country.code}" th:text="${country.name}">Country</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Create City</button>
+    </form>
+</div>
+</body>
+</html>

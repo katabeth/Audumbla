@@ -5,6 +5,10 @@ import com.sparta.audumbla.audumblaworldjpa.repositories.CityRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryLanguageRepository;
 import com.sparta.audumbla.audumblaworldjpa.repositories.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +38,22 @@ public class WorldService {
     // READ and UPDATE for all Tables
     // READ all cities, countries, languages
 
+    public Page<City> getCitiesPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return cityRepository.findAll(pageable);
+    }
+    public Page<City> getCitiesByPartialNamePage(String name, int page, int size) {
+        List<City> cities = cityRepository.findAll().stream()
+                .filter(city -> city.getName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
+
+        int start = Math.min(page * size, cities.size());
+        int end = Math.min((page + 1) * size, cities.size());
+
+        List<City> paginatedCities = cities.subList(start, end);
+        Pageable pageable = PageRequest.of(page, size);
+        return new PageImpl<>(paginatedCities, pageable, cities.size());
+    }
     @Transactional
     public List<City> getAllCities() {
         return cityRepository.findAll();
@@ -51,6 +71,11 @@ public class WorldService {
     public List<City> getCitiesByName(String name) {
         return cityRepository.findAll().stream()
                 .filter(city -> name.equalsIgnoreCase(city.getName()))
+                .collect(Collectors.toList());
+    }
+    public List<City> getCitiesByPartialName(String name) {
+        return cityRepository.findAll().stream()
+                .filter(city -> city.getName().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
     }
     public Optional<City> getCitiesByID(int id) {
@@ -241,6 +266,7 @@ public class WorldService {
             cityRepository.save(city);
         });
     }
+
     public void updateCountryTable (String countryCode, Country updatedCountry){
         getCountryByCountryCode(countryCode).ifPresent(country -> {
             country.setName(updatedCountry.getName());
@@ -272,6 +298,7 @@ public class WorldService {
     //Create methods
     public City createCity(City city) {
         nullCheck(city);
+        city.getCountryCode();
         return cityRepository.save(city);
     }
 
