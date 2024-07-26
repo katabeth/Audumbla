@@ -5,6 +5,7 @@ import com.sparta.audumbla.audumblaworldjpa.exceptions.ResourceNotFoundException
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,7 @@ public class CityMvcController {
     }
 
     @GetMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String editCity(@PathVariable int id, Model model) {
         Optional<City> city = worldService.getCitiesByID(id);
         if (city.isPresent()) {
@@ -52,6 +54,7 @@ public class CityMvcController {
     }
 
     @PostMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public String updateCity(@ModelAttribute City city, @RequestParam("code") String code, Model model) {
 
         city.setCountryCode(worldService.getCountryByCountryCode(code).orElseThrow());
@@ -64,6 +67,7 @@ public class CityMvcController {
     }
 
     @PostMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteCountry(@PathVariable int id) {
         Optional<City> city = worldService.getCitiesByID(id);
         if (city.isEmpty()) {
@@ -75,6 +79,7 @@ public class CityMvcController {
     }
 
     @GetMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showAddCityForm(Model model, String code) {
         model.addAttribute("newCity", new City());
         model.addAttribute("countries", worldService.getAllCountries());
@@ -83,6 +88,7 @@ public class CityMvcController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addCity(@ModelAttribute City city, @RequestParam("code") String code) {
 
         city.setCountryCode(worldService.getCountryByCountryCode(code).orElseThrow());
