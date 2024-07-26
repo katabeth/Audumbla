@@ -10,8 +10,6 @@
         }
     </script>
 </head>
-//TODO: Add pagination
-//TODO: Add Style
 <body>
 <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 <div class="container mt-4">
@@ -19,7 +17,7 @@
     <div class="row mb-4 align-items-center">
         <div class="col-md-6">
             <form id = "searchForm" action = "http://localhost:8080/countries?search=" class="d-flex">
-                <label for = "search">Search for:</label>
+                <label for = "search">Search by Country Code:</label>
                 <input id = "search" name = "search" type = "text" value = "Country Code">
                 <input class = "button" type = "submit" value = "Submit">
             </form>
