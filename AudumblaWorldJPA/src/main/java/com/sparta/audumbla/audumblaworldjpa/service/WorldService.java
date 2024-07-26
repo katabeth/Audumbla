@@ -47,11 +47,12 @@ public class WorldService {
                 .filter(city -> city.getName().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
 
-        int fromIndex = (page - 1) * size;
-        int toIndex = Math.min(fromIndex + size, cities.size());
+        int start = Math.min(page * size, cities.size());
+        int end = Math.min((page + 1) * size, cities.size());
 
-        List<City> paginatedCities = cities.subList(fromIndex, toIndex);
-        return new PageImpl<>(paginatedCities, PageRequest.of(page, size), cities.size());
+        List<City> paginatedCities = cities.subList(start, end);
+        Pageable pageable = PageRequest.of(page, size);
+        return new PageImpl<>(paginatedCities, pageable, cities.size());
     }
     @Transactional
     public List<City> getAllCities() {
