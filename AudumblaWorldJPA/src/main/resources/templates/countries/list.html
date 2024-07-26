@@ -3,69 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <title>List Countries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sandstone/bootstrap.min.css" rel="stylesheet">
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this country?');
+        }
+    </script>
 </head>
-//TODO: Add pagination
-//TODO: Add Style
 <body>
-    <h1 th:text="${message}"></h1>
-    <form id = "searchForm" action = "http://localhost:8080/countries?search=">
-        <label for = "search">Search for:</label>
-        <input id = "search" name = "search" type = "text" value = "Country Code">
-        <input class = "button" type = "submit" value = "Submit">
-    </form>
-    <table class = "table table-dark">
-        <!-- table headers -->
-        <thead>
-        <!-- table rows -->
-        <tr>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Continent</th>
-            <th>Region</th>
-            <th>Surface Area</th>
-            <th>Independence Year</th>
-            <th>Population</th>
-            <th>Life Expectancy</th>
-            <th>GNP</th>
-            <th>GNP Old</th>
-            <th>Local Name</th>
-            <th>Government Form</th>
-            <th>Head of State</th>
-            <th>Capital</th>
-            <th>Short Code</th>
-        </tr>
-        </thead>
-        <!-- table data -->
-        <tbody>
-            <tr th:each="country : ${countries.stream().toList()}">
-                <td th:text="${country.getCode()}"></td>
-                <td th:text="${country.getName()}"></td>
-                <td th:text="${country.getContinent()}"></td>
-                <td th:text="${country.getRegion()}"></td>
-                <td th:text="${country.getSurfaceArea()}"></td>
-                <td th:text="${country.getIndepYear()}"></td>
-                <td th:text="${country.getPopulation()}"></td>
-                <td th:text="${country.getLifeExpectancy()}"></td>
-                <td th:text="${country.getGnp()}"></td>
-                <td th:text="${country.getGNPOld()}"></td>
-                <td th:text="${country.getLocalName()}"></td>
-                <td th:text="${country.getGovernmentForm()}"></td>
-                <td th:text="${country.getHeadOfState()}"></td>
-                <td th:text="${country.getCapital()}"></td>
-                <td th:text="${country.getCode2()}"></td>
-                <td>
-                    <form th:action="@{/countries/delete/{countryCode}(countryCode=${country.getCode()})}" method="post">
-                        <input type="submit" value="Delete">
-                    </form>
-                </td>
-                <td>
-                    <form id = "update" action = "http://localhost:8080/countries/update?currentCountry=">
-                        <input name = "currentCountry" type = "hidden" th:value = "${country.getCode()}">
-                        <input class = "button" type = "submit" value = "Update">
-                    </form>
-
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<div class="container mt-4">
+    <h1 class="mb-4" th:text="${message}"></h1>
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-6">
+            <form id = "searchForm" action = "http://localhost:8080/countries?search=" class="d-flex">
+                <label for = "search">Search by Country Code:</label>
+                <input id = "search" name = "search" type = "text" th:value = "${countryCode}" placeholder="Enter country code">
+                <input class = "button" type = "submit" value = "Submit">
+            </form>
+        </div>
+        <!-- Buttons -->
+        <div class="col-md-6 text-end">
+            <form action="#" th:action="@{/countries}" method="get" class="d-inline me-2">
+                <button type="submit" class="btn btn-primary">View All Countries</button>
+            </form>
+            <form action="#" th:action="@{/countries/create}" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success">Add New Country</button>
+            </form>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class = "table table-bordered table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Continent</th>
+                <th>Region</th>
+                <th>Surface Area</th>
+                <th>Independence Year</th>
+                <th>Population</th>
+                <th>Life Expectancy</th>
+                <th>GNP</th>
+                <th>GNP Old</th>
+                <th>Local Name</th>
+                <th>Government Form</th>
+                <th>Head of State</th>
+                <th>Capital</th>
+                <th>Short Code</th>
+                <th>Update</th>
+                <th>Delete</th>
             </tr>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <tr th:each="country : ${countries.stream().toList()}">
+                    <td th:text="${country.getCode()}"></td>
+                    <td th:text="${country.getName()}"></td>
+                    <td th:text="${country.getContinent()}"></td>
+                    <td th:text="${country.getRegion()}"></td>
+                    <td th:text="${country.getSurfaceArea()}"></td>
+                    <td th:text="${country.getIndepYear()}  ?: 'N/A'"></td>
+                    <td th:text="${country.getPopulation()}"></td>
+                    <td th:text="${country.getLifeExpectancy()}  ?: 'N/A'"></td>
+                    <td th:text="${country.getGnp()}  ?: 'N/A'"></td>
+                    <td th:text="${country.getGNPOld()}  ?: 'N/A'"></td>
+                    <td th:text="${country.getLocalName()}"></td>
+                    <td th:text="${country.getGovernmentForm()}"></td>
+                    <td th:text="${country.getHeadOfState()}  ?: 'N/A'"></td>
+                    <td th:text="${country.getCapital()}  ?: 'N/A'"></td>
+                    <td th:text="${country.getCode2()}"></td>
+                    <td>
+                        <form th:action="@{/countries/delete/{countryCode}(countryCode=${country.getCode()})}"
+                              method="post" style="display:inline;" onsubmit="return confirmDelete()">
+                            <input type="submit" value="Delete">
+                        </form>
+                    </td>
+                    <td>
+                        <form id = "update" action = "http://localhost:8080/countries/update?currentCountry="
+                              style="display:inline;">
+                            <input name = "currentCountry" type = "hidden" th:value = "${country.getCode()}">
+                            <input class = "button" type = "submit" value = "Update">
+                        </form>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>
