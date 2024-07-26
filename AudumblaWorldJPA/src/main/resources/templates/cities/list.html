@@ -27,7 +27,7 @@
             <form action="#" th:action="@{/cities}" method="get" class="d-inline me-2">
                 <button type="submit" class="btn btn-primary">View All Cities</button>
             </form>
-            <form action="#" th:action="@{/cities/add}" method="get" class="d-inline">
+            <form action="#" th:action="@{/cities/create}" method="get" class="d-inline">
                 <button type="submit" class="btn btn-success">Add New City</button>
             </form>
         </div>
@@ -54,7 +54,7 @@
                 <td th:text="${city.population}">Population</td>
                 <td th:text="${city.countryCode.code}">Country Code</td>
                 <td>
-                    <form th:action="@{/cities/edit/{id}(id=${city.id})}" method="get" style="display:inline;">
+                    <form th:action="@{/cities/update/{id}(id=${city.id})}" method="get" style="display:inline;">
                         <button type="submit" class="btn btn-primary btn-sm">Update</button>
                     </form>
                 </td>

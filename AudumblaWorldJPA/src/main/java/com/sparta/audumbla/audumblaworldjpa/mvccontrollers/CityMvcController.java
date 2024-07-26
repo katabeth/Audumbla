@@ -2,7 +2,6 @@ package com.sparta.audumbla.audumblaworldjpa.mvccontrollers;
 
 import com.sparta.audumbla.audumblaworldjpa.entities.City;
 import com.sparta.audumbla.audumblaworldjpa.exceptions.ResourceNotFoundException;
-import com.sparta.audumbla.audumblaworldjpa.repositories.CityRepository;
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +28,7 @@ public class CityMvcController {
                             @RequestParam(name = "size", defaultValue = "100") int size) {
     Page<City> cityPage = worldService.getCitiesPage(page, size);
     model.addAttribute("cityPage", cityPage);
-    return "cities/cityView";
+    return "cities/list";
 }
 
     @GetMapping("/search")
@@ -39,17 +38,17 @@ public class CityMvcController {
         Page<City> cityPage = worldService.getCitiesByPartialNamePage(name, page, size);
         model.addAttribute("name", name);
         model.addAttribute("cityPage", cityPage);
-        return "cities/cityView";
+        return "cities/list";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/update/{id}")
     public String editCity(@PathVariable int id, Model model) {
         Optional<City> city = worldService.getCitiesByID(id);
         if (city.isPresent()) {
             model.addAttribute("cityToEdit", city.orElseThrow());
         }
         model.addAttribute("countries", worldService.getAllCountries());
-        return "cities/updateCity";
+        return "cities/update";
     }
 
     @PostMapping("/update")
@@ -61,7 +60,7 @@ public class CityMvcController {
         List<City> cityList = worldService.getAllCities();
         model.addAttribute("cityList", cityList);
 
-        return "cities/cityView";
+        return "redirect:/cities";
     }
 
     @PostMapping("/delete/{id}")
@@ -75,15 +74,15 @@ public class CityMvcController {
         return "redirect:/cities";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/create")
     public String showAddCityForm(Model model, String code) {
         model.addAttribute("newCity", new City());
         model.addAttribute("countries", worldService.getAllCountries());
         model.addAttribute("code", code);
-        return "cities/addCity";
+        return "cities/create";
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public String addCity(@ModelAttribute City city, @RequestParam("code") String code) {
 
         city.setCountryCode(worldService.getCountryByCountryCode(code).orElseThrow());

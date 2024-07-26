@@ -28,10 +28,11 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/", "/welcome").permitAll()
-                        .requestMatchers("**/create").hasRole("ADMIN")
+                        .requestMatchers("/cities/", "/countries/", "/languages").permitAll()
+                        //.requestMatchers("/create", "/delete","/update").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .userDetailsService(audumblaSecurity)
-                .httpBasic(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults())
                 .build();
     }
     @Bean

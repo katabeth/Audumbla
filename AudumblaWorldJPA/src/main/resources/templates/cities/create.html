@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <title>City Creation</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sandstone/bootstrap.min.css" rel="stylesheet">
-    <link href="../static/css/styles.scss" rel="stylesheet">
 </head>
 <body>
 <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 <div class="container mt-4">
     <h2>Create City</h2>
-    <form action="#" th:action="@{/cities/add}" method="post" th:object="${newCity}">
+    <form action="#" th:action="@{/cities/create}" method="post" th:object="${newCity}">
         <input type="hidden" name="id" th:value="${newCity.id}">
         <div class="mb-3">
             <label for="name" class="form-label">Name:</label>
