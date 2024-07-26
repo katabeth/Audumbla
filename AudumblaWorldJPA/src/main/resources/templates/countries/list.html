@@ -18,7 +18,7 @@
         <div class="col-md-6">
             <form id = "searchForm" action = "http://localhost:8080/countries?search=" class="d-flex">
                 <label for = "search">Search by Country Code:</label>
-                <input id = "search" name = "search" type = "text" th:value = "${countryCode}">
+                <input id = "search" name = "search" type = "text" th:value = "${countryCode}" placeholder="Enter country code">
                 <input class = "button" type = "submit" value = "Submit">
             </form>
         </div>
