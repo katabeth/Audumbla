@@ -5,6 +5,7 @@ import com.sparta.audumbla.audumblaworldjpa.entities.Countrylanguage;
 import com.sparta.audumbla.audumblaworldjpa.entities.CountrylanguageId;
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ public class LanguageMvcController {
 
 
     @PostMapping("/delete/{countryCode}/{languageText}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteLanguage(@PathVariable String countryCode, @PathVariable String languageText) {
         CountrylanguageId id = new CountrylanguageId();
         id.setCountryCode(countryCode);
@@ -41,6 +43,7 @@ public class LanguageMvcController {
     }
 
     @GetMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getCreateLanguageForm(Model model) {
         Countrylanguage countryLanguageForModel = new Countrylanguage();
         countryLanguageForModel.setId(new CountrylanguageId());
@@ -50,6 +53,7 @@ public class LanguageMvcController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public String createLanguage(Countrylanguage language, @RequestParam("code") String code, @RequestParam("language") String languageText) {
         language.setCountryCode(worldService.getCountryByCountryCode(code).orElseThrow());
         CountrylanguageId id = new CountrylanguageId();
@@ -64,6 +68,7 @@ public class LanguageMvcController {
     }
 
     @GetMapping("/update/{countryCode}/{languageText}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getUpdateLanguageForm(@PathVariable String countryCode, @PathVariable String languageText, Model model) {
         model.addAttribute("language", worldService.getLanguageByCodeAndLanguage(countryCode,languageText).orElseThrow());
         model.addAttribute("countryCodes", worldService.getAllCountries().stream().map(Country::getCode).toList());
@@ -71,6 +76,7 @@ public class LanguageMvcController {
     }
 
     @PostMapping("/update/{codeOfCountry}/{languageText}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String updateLanguage(Countrylanguage language,@PathVariable String codeOfCountry, @PathVariable String languageText) {
         CountrylanguageId id = new CountrylanguageId();
         id.setCountryCode(codeOfCountry);

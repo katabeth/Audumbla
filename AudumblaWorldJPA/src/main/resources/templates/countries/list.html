@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <title>List Countries</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sandstone/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
     <script>
         function confirmDelete() {
             return confirm('Are you sure you want to delete this country?');
         }
     </script>
 </head>
-<body>
+<body class="container-bg2">
 <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 <div class="container mt-4">
     <h1 class="mb-4" th:text="${message}"></h1>
@@ -18,7 +19,7 @@
         <div class="col-md-6">
             <form id = "searchForm" action = "http://localhost:8080/countries?search=" class="d-flex">
                 <label for = "search">Search by Country Code:</label>
-                <input id = "search" name = "search" type = "text" th:value = "${countryCode}" placeholder="Enter country code">
+                <input id = "search" name = "search" type = "text" th:value = "${countryCode}" class="form-control me-2" placeholder="Enter country code">
                 <input class = "button" type = "submit" value = "Submit">
             </form>
         </div>
@@ -90,5 +91,6 @@
         </table>
     </div>
 </div>
+<footer th:replace="~{fragments/footers.html :: personal}"></footer>
 </body>
 </html>

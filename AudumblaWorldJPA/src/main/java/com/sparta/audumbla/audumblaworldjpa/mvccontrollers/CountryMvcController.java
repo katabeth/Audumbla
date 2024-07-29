@@ -7,6 +7,7 @@ import com.sparta.audumbla.audumblaworldjpa.exceptions.ResourceNotFoundException
 import com.sparta.audumbla.audumblaworldjpa.service.WorldService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -37,6 +38,7 @@ public class CountryMvcController {
     }
 
     @GetMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public String createCountry(Model model) {
         model.addAttribute("country", new Country());
         model.addAttribute("continents", worldService.getAllContinents());
@@ -44,6 +46,7 @@ public class CountryMvcController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public String createCountry(@Valid @ModelAttribute("country") Country country, Errors errors) {
         if (errors.hasErrors()) {
             throw new DataMismatchException("Invalid country: " + errors);
@@ -53,6 +56,7 @@ public class CountryMvcController {
         }
     }
     @PostMapping("/delete/{countryCode}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteCountry(@PathVariable String countryCode) {
         if (!worldService.getCitiesByCountryCode(countryCode).isEmpty()){
             throw new HasDependantsException("The country " + countryCode +" cannot be deleted because cities depend on it");
@@ -63,6 +67,7 @@ public class CountryMvcController {
         return "redirect:/countries";
     }
     @GetMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public String updateCountry(@RequestParam() String currentCountry, Model model) {
         model.addAttribute("countryToEdit", worldService.getCountryByCountryCode(currentCountry)
                 .orElseThrow(() -> new ResourceNotFoundException("Country not found: " + currentCountry)));
@@ -70,6 +75,7 @@ public class CountryMvcController {
         return "countries/update";
     }
     @PostMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public String updateCountry(@Valid @ModelAttribute("countryToEdit") Country country, Errors errors) {
         if (errors.hasErrors()) {
             throw new DataMismatchException("Invalid country: " + errors);

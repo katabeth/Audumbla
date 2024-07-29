@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class APIService {
+public class APIService{
     private final ApiKeyRepository apiKeyRepository;
     @Autowired
     public APIService(ApiKeyRepository apiKeyRepository) {
